@@ -29,7 +29,7 @@ static void* pmm_alloc(size_t size){
 	int align = 1;
 	while (align < size) align <<= 1;
 	for (int i = 0; i < free_cnt; i++){
-		int align_addr = (int)(free_dict[i].addr|align);
+		int align_addr = ((int)free_dict[i].addr|align);
 		int dict_lim = (int)free_dict[i].addr + free_dict[i].size;
 		int dict_r = align_addr + size;
 		if (dict_lim >= dict_r){
