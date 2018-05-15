@@ -2,9 +2,9 @@
 #include <mylib.h>
 
 MOD_DEF(pmm) {
-	.init = pmm_init,
-	.alloc = pmm_alloc,
-	.free = pmm_free,
+	.init = pmm->init,
+	.alloc = pmm->alloc,
+	.free = pmm->free,
 };
 
 typedef struct node{
