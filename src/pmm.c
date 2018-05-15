@@ -14,27 +14,42 @@ MOD_DEF(pmm) {
 typedef struct node{
     void* addr;
     size_t size;
-    int freed;
-} mem_dict;
-mem_dict dict[100000];
-static int dict_cnt;
+} node;
+node free_dict[100000];
+node used_dict[100000];
+
+static int free_cnt, used_cnt;
 
 static void pmm_init(){
-	dict_cnt = 1;
-	dict[0] = (mem_dict){ _heap.start, _heap.end - _heap.start, 1};
+	free_cnt = 1, used_cnt = 0;
+	free_dict[0] = (node){ _heap.start, _heap.end - _heap.start, 1};
 }
 
 static void* pmm_alloc(size_t size){
 	int align = 1;
 	while (align < size) align <<= 1;
 	for (int i = 0; i < dict_cnt; i++){
-		if (dict[i].freed && (int)dict[i].addr >= size){
-				
+		int dict_lim = (int)free_dict[i].addr + free_dict[i].size;
+		int dict_r = (int)free_dict[i].addr | align + size;
+		if (dict_lim >= dict_r){
+			used_dict[used_cnt++] = (node){(void*)dict_r, dict_lim - dict_r};
+
+			void* ret = free_dict[i].addr | align;
+			free_dict[i].addr = dict_r;
+			free_dict[i].size = dict_lim - dict_r;
+			return ret;
 		}
 	}
+	return NULL;
 }
 
 static void pmm_free(void* ptr){
-
-
+	for (int i = 0; i < used_cnt; i++){
+		if (used_dict[i].addr == ptr){
+			free_dicte[free_cnt++] = (node){used_dict[i].addr, used_dict[i].size};
+			used_dict[i] = used_dict[used_cnt];
+			--used_cnt;
+			return;
+		}
+	}
 }
