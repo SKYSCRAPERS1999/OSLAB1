@@ -20,7 +20,7 @@ static void os_init() {
 static void os_run() {
 
   printf("Hello, OS World!\n");
-  for (volatile int sz = 1000; sz < 100000; sz+=1000){
+  for (volatile int sz = 1; sz < 100000; sz<<=1){
     void *ptr = pmm->alloc(sz);
     printf("0x%x\n", (int)ptr);
     if (!ptr) {
