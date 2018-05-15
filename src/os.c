@@ -22,7 +22,7 @@ static void os_run() {
   printf("Hello, OS World!\n");
   for (volatile int sz = 1000; sz < 100000; sz+=1000){
     void *ptr = pmm->alloc(sz);
-    printf("%08d\n", (int)ptr);
+    printf("0x%x\n", (int)ptr);
     if (!ptr) {
       panic("memory allocation failed");
     }
