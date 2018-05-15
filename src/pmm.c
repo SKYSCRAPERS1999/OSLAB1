@@ -21,7 +21,7 @@ static int dict_cnt;
 
 static void pmm_init(){
 	dict_cnt = 1;
-	dict[0] = { _heap.start, _heap.end - heap.start, 1};
+	dict[0] = (mem_dict){ _heap.start, _heap.end - heap.start, 1};
 }
 
 static void* pmm_alloc(size_t size){
