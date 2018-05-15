@@ -29,7 +29,7 @@ static void pmm_init(){
 
 static void* pmm_alloc(size_t size){
 	int bitcnt = 1;
-	while (align <= size) bitcnt <<= 1;
+	for (int i = 1; i <= size; i <<= 1) bitcnt++;
 	align = 0x7fffffff ^ ((1 << bitcnt) - 1);
 	for (int i = 0; i < free_cnt; i++){
 		int align_addr = ((int)free_dict[i].addr & align);
