@@ -28,10 +28,13 @@ static void pmm_init(){
 }
 
 static void* pmm_alloc(size_t size){
-	int align = 1;
-	while (align < size) align <<= 1;
+	int align = 1, hbit = 1;
+	while (align <= size) align = ((align<<1)|1), hbit <<= 1;
+	align = ~align;
 	for (int i = 0; i < free_cnt; i++){
-		int align_addr = ((int)free_dict[i].addr|align);
+		int align_addr = ((int)free_dict[i].addr & align);
+		if (align_addr < (int)free_dict[i].addr) align_addr += hbit;
+
 		int dict_lim = (int)free_dict[i].addr + free_dict[i].size;
 		int dict_r = align_addr + size;
 		if (dict_lim >= dict_r){
