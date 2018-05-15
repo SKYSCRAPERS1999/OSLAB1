@@ -22,7 +22,7 @@ static int free_cnt, used_cnt;
 
 static void pmm_init(){
 	free_cnt = 1, used_cnt = 0;
-	free_dict[0] = (node){ _heap.start, _heap.end - _heap.start, 1};
+	free_dict[0] = (node){ _heap.start, _heap.end - _heap.start};
 }
 
 static void* pmm_alloc(size_t size){
@@ -35,7 +35,7 @@ static void* pmm_alloc(size_t size){
 		if (dict_lim >= dict_r){
 			used_dict[used_cnt++] = (node){(void*)dict_r, dict_lim - dict_r};
 
-			void* ret = align_addr;
+			void* ret = (void*)align_addr;
 			free_dict[i].addr = dict_r;
 			free_dict[i].size = dict_lim - dict_r;
 			return ret;
