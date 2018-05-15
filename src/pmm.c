@@ -36,7 +36,7 @@ static void* pmm_alloc(size_t size){
 			used_dict[used_cnt++] = (node){(void*)dict_r, dict_lim - dict_r};
 
 			void* ret = (void*)align_addr;
-			free_dict[i].addr = dict_r;
+			free_dict[i].addr = (void*)dict_r;
 			free_dict[i].size = dict_lim - dict_r;
 			return ret;
 		}
