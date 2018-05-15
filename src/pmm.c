@@ -15,8 +15,8 @@ typedef struct node{
     void* addr;
     size_t size;
 } node;
-node free_dict[100000];
-node used_dict[100000];
+node free_dict[300000];
+node used_dict[300000];
 
 static int free_cnt, used_cnt;
 
