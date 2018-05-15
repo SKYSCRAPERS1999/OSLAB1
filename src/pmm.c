@@ -28,7 +28,7 @@ static void* pmm_alloc(size_t size){
 	int align = 1;
 	while (align < size) align <<= 1;
 	for (int i = 0; i < dict_cnt; i++){
-		if (dict[i].freed && dict[i].addr >= size){
+		if (dict[i].freed && (int)dict[i].addr >= size){
 				
 		}
 	}
