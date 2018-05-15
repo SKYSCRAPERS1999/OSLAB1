@@ -25,7 +25,7 @@ MOD_DEF(kmt) {
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 
-	return NULL;
+	return 0;
 }
 
 static void kmt_teardown(thread_t *thread){
