@@ -34,7 +34,7 @@ static void kmt_teardown(thread_t *thread){
 
 static thread_t* kmt_schedule(){
 
-	return NULL;
+	return (thread_t*)NULL;
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name){
@@ -58,5 +58,5 @@ static void kmt_sem_wait(sem_t *sem){
 }
 
 static void kmt_sem_signal(sem_t *sem){
-	
+
 }
