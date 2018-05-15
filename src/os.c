@@ -24,6 +24,7 @@ static void os_run() {
     if (!ptr) {
       panic("memory allocation failed");
     }
+    pmm->free(ptr);
   }
 
   _intr_write(1); // enable interrupt
