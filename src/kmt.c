@@ -3,7 +3,7 @@
 
 int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg);
 void kmt_teardown(thread_t *thread);
-thread_t kmt_schedule();
+thread_t* kmt_schedule();
 void kmt_spin_init(spinlock_t *lk, const char *name);
 void kmt_spin_lock(spinlock_t *lk);
 void kmt_spin_unlock(spinlock_t *lk);
