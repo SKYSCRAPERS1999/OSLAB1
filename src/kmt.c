@@ -24,6 +24,39 @@ MOD_DEF(kmt) {
 };
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
-	
+
+	return NULL;
+}
+
+static void kmt_teardown(thread_t *thread){
+
+}
+
+static thread_t* kmt_schedule(){
+
+	return NULL;
+}
+
+static void kmt_spin_init(spinlock_t *lk, const char *name){
+
+}
+
+static void kmt_spin_lock(spinlock_t *lk){
+
+}
+
+static void kmt_spin_unlock(spinlock_t *lk){
+
+}
+
+static void kmt_sem_init(sem_t *sem, const char *name, int value){
+
+}
+
+static void kmt_sem_wait(sem_t *sem){
+
+}
+
+static void kmt_sem_signal(sem_t *sem){
 	
 }
