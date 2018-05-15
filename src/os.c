@@ -17,6 +17,7 @@ static void os_init() {
 }
 
 static void os_run() {
+  printf("Hello, OS World!\n");
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
