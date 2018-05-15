@@ -28,13 +28,14 @@ static void pmm_init(){
 static void* pmm_alloc(size_t size){
 	int align = 1;
 	while (align < size) align <<= 1;
-	for (int i = 0; i < dict_cnt; i++){
+	for (int i = 0; i < free_cnt; i++){
+		int align_addr = (int)(free_dict[i].addr|align);
 		int dict_lim = (int)free_dict[i].addr + free_dict[i].size;
-		int dict_r = (int)free_dict[i].addr | align + size;
+		int dict_r = align_addr + size;
 		if (dict_lim >= dict_r){
 			used_dict[used_cnt++] = (node){(void*)dict_r, dict_lim - dict_r};
 
-			void* ret = free_dict[i].addr | align;
+			void* ret = align_addr;
 			free_dict[i].addr = dict_r;
 			free_dict[i].size = dict_lim - dict_r;
 			return ret;
