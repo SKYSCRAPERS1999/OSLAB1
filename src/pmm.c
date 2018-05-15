@@ -47,7 +47,7 @@ static void* pmm_alloc(size_t size){
 static void pmm_free(void* ptr){
 	for (int i = 0; i < used_cnt; i++){
 		if (used_dict[i].addr == ptr){
-			free_dicte[free_cnt++] = (node){used_dict[i].addr, used_dict[i].size};
+			free_dict[free_cnt++] = (node){used_dict[i].addr, used_dict[i].size};
 			used_dict[i] = used_dict[used_cnt];
 			--used_cnt;
 			return;
