@@ -19,6 +19,13 @@ static void os_init() {
 
 static void os_run() {
   printf("Hello, OS World!\n");
+  for (int sz = 1; sz < 1000; i++){
+    void *ptr = pmm->alloc(size);
+    if (!ptr) {
+      panic("memory allocation failed");
+    }
+  }
+  
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }

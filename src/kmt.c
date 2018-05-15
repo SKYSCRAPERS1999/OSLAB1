@@ -22,3 +22,8 @@ MOD_DEF(kmt) {
 	.sem_wait = kmt_sem_wait,
 	.sem_signal = kmt_sem_signal,
 };
+
+static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
+	
+	
+}
