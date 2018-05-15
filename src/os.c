@@ -19,7 +19,7 @@ static void os_init() {
 
 static void os_run() {
   printf("Hello, OS World!\n");
-  for (int sz = 1; sz < 1000; i++){
+  for (int sz = 1; sz < 1000; sz++){
     void *ptr = pmm->alloc(sz);
     if (!ptr) {
       panic("memory allocation failed");
