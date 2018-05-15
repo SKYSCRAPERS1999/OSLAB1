@@ -21,6 +21,8 @@ node used_dict[100000];
 static int free_cnt, used_cnt;
 
 static void pmm_init(){
+	memset(free_dict, 0, sizeof(free_dict));
+	memset(used_dict, 0, sizeof(used_dict));
 	free_cnt = 1, used_cnt = 0;
 	free_dict[0] = (node){ _heap.start, _heap.end - _heap.start};
 }
