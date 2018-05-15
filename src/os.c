@@ -19,7 +19,7 @@ static void os_init() {
 
 static void os_run() {
   printf("Hello, OS World!\n");
-  for (long long sz = 1; sz < 1e9; sz++){
+  for (long long sz = 1; sz < 1e5; sz++){
     void *ptr = pmm->alloc(sz);
     sz = (sz + 1) * 2 - 3;
     if (!ptr) {
