@@ -3,7 +3,7 @@
 
 static void pmm_init();
 static void* pmm_alloc(size_t);
-static void* pmm_free(void*);
+static void pmm_free(void*);
 
 MOD_DEF(pmm) {
 	.init = pmm_init,
@@ -34,7 +34,7 @@ static void* pmm_alloc(size_t size){
 	}
 }
 
-static void* pmm_free(void* ptr){
+static void pmm_free(void* ptr){
 
 
 }
