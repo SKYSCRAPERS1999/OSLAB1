@@ -64,7 +64,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 }
 
 static void kmt_teardown(thread_t *thread){
-	pmm->free(hread->kstack);
+	pmm->free(thread->kstack);
 	thread->freed = 1;
 }
 
