@@ -26,9 +26,9 @@ MOD_DEF(kmt) {
 };
 
 static int cur_id = -1, thread_num = 0;
-typedef struct Ttable {
-  spinlock_t lk;
-  thread_t tlist[MAXTRD];
+struct {
+  struct spinlock_t lk;
+  struct thread_t tlist[MAXTRD];
 } Ttable;
 
 void kmt_init(){
