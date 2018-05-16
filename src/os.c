@@ -1,7 +1,7 @@
 #include <os.h>
 #include <mylib.h>
+
 #define TESTRUN
-//#define TESTMEM
 
 static void os_init();
 static void os_run();
@@ -19,17 +19,6 @@ static void os_init() {
   }
 }
 
-static void test_mem(){
-  for (volatile int sz = 1e5; sz > 0; sz-=1e3){
-    void *ptr = pmm->alloc(sz);
-    printf("0x%x\n", (int)ptr);
-    if (!ptr) {
-      panic("memory allocation failed");
-    }
-    pmm->free(ptr);
-  }
-}
-
 static void f(void* arg) {
   while (1) {
     printf("%c", arg);
@@ -42,10 +31,6 @@ static void test_run() {
 }
 
 static void os_run() {
-
-  #ifdef TESTMEM
-    test_mem();
-  #endif
 
   #ifdef TESTRUN
     test_run();
