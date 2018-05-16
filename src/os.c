@@ -28,7 +28,7 @@ static void os_run() {
     }
     pmm->free(ptr);
   }
-
+  
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
