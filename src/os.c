@@ -23,13 +23,7 @@ static void f(void *arg) {
   }
 }
 
-static void test_run() {
-  thread_t t1;
-  kmt->create(&t1, f, (void *)'a');
-}
-
-static void os_run() {
-
+static void test_mem(){
   printf("Hello, OS World!\n");
   for (volatile int sz = 1e5; sz > 0; sz-=1e3){
     void *ptr = pmm->alloc(sz);
@@ -39,7 +33,16 @@ static void os_run() {
     }
     pmm->free(ptr);
   }
-  
+}
+
+static void test_run() {
+  thread_t t1;
+  kmt->create(&t1, f, (void *)'a');
+}
+
+static void os_run() {
+
+  test_run();
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
