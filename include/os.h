@@ -2,7 +2,7 @@
 #define __OS_H__
 
 #define MAXTRD 20
-#define STKSZ (1<<12)
+#define STKSZ (1<<10)
 #define REGSZ (1<<7)
 
 #include <kernel.h>
