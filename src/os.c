@@ -37,7 +37,8 @@ static void os_run() {
   #ifdef TESTRUN
     test_run();
   #endif  
-    printf("return\n");
+  printf("return\n");
+  
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
