@@ -40,7 +40,10 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 	kmt->spin_lock(&Ttable.lk);
 	int thread_idx = -1;
 	for (int i = 0; i < thread_num; i++) {
-		if (tlist[i].freed) thread_idx = i, break;
+		if (tlist[i].freed) {
+			thread_idx = i; 
+			break;
+		}
 	}
 	if (thread_idx == -1) thread_idx = thread_num++;
 
