@@ -48,7 +48,7 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-  if (ev.event == _EVENT_IRQ_TIMER) _putc('*');
+  if (ev.event == _EVENT_IRQ_TIMER) ;//_putc('*');
   if (ev.event == _EVENT_IRQ_IODEV) _putc('I');
   if (ev.event == _EVENT_ERROR) {
     _putc('x');
