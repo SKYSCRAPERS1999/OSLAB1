@@ -29,15 +29,15 @@ static void test_mem(){
   }
 }
 
-static void f(char arg) {
+static void f(void* arg) {
   while (1) {
-    printf("%c", arg);
+    printf("%c", (char)arg);
   }
 }
 
 static void test_run() {
   thread_t t1;
-  kmt->create(&t1, f, 'a');
+  kmt->create(&t1, f, (void*)'a');
 }
 
 static void os_run() {
