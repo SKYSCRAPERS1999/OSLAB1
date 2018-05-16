@@ -54,7 +54,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 	tlist[thread_idx].freed = 0;
 	tlist[thread_idx].id = cur_id = thread_idx;
 	tlist[thread_idx].kstack = pmm->alloc(STKSZ);
-	_Area Tkstack = {tlist[thread_idx].kstack, tlist[thread_idx].kstack + MAXTRD};
+	_Area Tkstack = {tlist[thread_idx].kstack, tlist[thread_idx].kstack + STKSZ};
 	tlist[thread_idx].reg = _make(Tkstack, entry, arg);
 
 	thread = &tlist[thread_idx];
