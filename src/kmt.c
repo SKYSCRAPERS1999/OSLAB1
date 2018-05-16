@@ -13,6 +13,7 @@ static void kmt_sem_wait(sem_t *sem);
 static void kmt_sem_signal(sem_t *sem);
 
 MOD_DEF(kmt) {
+	.init = kmt_init,
 	.create = kmt_create,
 	.teardown = kmt_teardown,
 	.schedule = kmt_schedule,
@@ -35,7 +36,7 @@ void kmt_init(){
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
-	
+
 	kmt_spin_lock(&lk);
 	int thread_idx = -1;
 	for (int i = 0; i < thread_num; i++) {
@@ -48,7 +49,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 		_halt(1);
 	}
 
-	tlist[thread_idx].freed = 1;
+	tlist[thread_idx].freed = 0;
 	tlist[thread_idx].id = cur_id = thread_idx;
 	tlist[thread_idx].kstack = pmm->alloc(STKSZ);
 	_Area Tkstack = {tlist[thread_idx].kstack, tlist[thread_idx].kstack + MAXTRD};
@@ -61,7 +62,8 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 }
 
 static void kmt_teardown(thread_t *thread){
-	
+	pmm->free(hread->kstack);
+	thread->freed = 1;
 }
 
 static thread_t* kmt_schedule(){
