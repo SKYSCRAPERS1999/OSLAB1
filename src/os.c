@@ -1,5 +1,7 @@
 #include <os.h>
 #include <mylib.h>
+#define TESTRUN
+//#define TESTMEM
 
 static void os_init();
 static void os_run();
@@ -41,8 +43,15 @@ static void test_run() {
 }
 
 static void os_run() {
-  if (0) test_mem();
-  else test_run();
+
+  #ifdef TESTMEM
+    test_mem();
+  #endif
+
+  #ifdef TESTRUN
+    test_run();
+  #endif
+
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
