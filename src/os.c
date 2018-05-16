@@ -56,7 +56,16 @@ static void os_run() {
   while (1) ; // should never return
 }
 
+static int thread_id = -1;
+extern thread_t tlist[MAXTRD];
+
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
+  if (thread_id != -1) {
+      memcpy(tlist[thread_id].reg, regs, REGSZ);
+  }
+  thread_t *t = kmt->schedule();
+  thread_id = t->id;
+
   if (ev.event == _EVENT_IRQ_TIMER) ;//_putc('*');
   if (ev.event == _EVENT_IRQ_IODEV) _putc('I');
   if (ev.event == _EVENT_ERROR) {

@@ -66,11 +66,23 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 static void kmt_teardown(thread_t *thread){
 	pmm->free(thread->kstack);
 	thread->freed = 1;
+	if (thread->id == cur_id) cur_id = -1;
 }
 
 static thread_t* kmt_schedule(){
 	
-	return (thread_t*)NULL;
+	int thread_idx = -1, chg = 0;
+	if (cur_id != -1) chg = 1;
+	for (int i = 0; i < thread_num; i++) {
+		if (chg && i == cur_id) continue;
+		if (!tlist[i].freed) {
+			thread_idx = i; 
+			break;
+		}
+	}
+
+	if (thread_idx == -1) return NULL;
+	return &tlist[thread_idx];
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name){
