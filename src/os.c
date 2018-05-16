@@ -41,8 +41,8 @@ static void test_run() {
 }
 
 static void os_run() {
-  //test_mem();
-  test_run();
+  if (0) test_mem();
+  else test_run();
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
