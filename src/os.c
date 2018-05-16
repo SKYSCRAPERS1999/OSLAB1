@@ -29,9 +29,9 @@ static void test_mem(){
   }
 }
 
-static void f(char arg) {
+static void f(void *arg) {
   while (1) {
-    _putc(arg);
+    _putc((char)arg);
   }
 }
 
