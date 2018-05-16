@@ -27,17 +27,17 @@ MOD_DEF(kmt) {
 
 static int cur_id = -1, thread_num = 0;
 struct {
-  struct spinlock_t lk;
-  struct thread_t tlist[MAXTRD];
-} ptable;
+  spinlock_t lk;
+  thread_t tlist[MAXTRD];
+} Ttable;
 
 void kmt_init(){
-	kmt_spin_init(&ptable.lk, "mutex");
+	kmt->spin_init(&Ttable.lk, "mutex");
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 
-	kmt_spin_lock(&lk);
+	kmt->spin_lock(&lk);
 	int thread_idx = -1;
 	for (int i = 0; i < thread_num; i++) {
 		if (tlist[i].freed) thread_idx = i, break;
@@ -56,7 +56,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 	tlist[thread_idx].reg = _make(Tkstack, entry, arg);
 
 	thread = &tlist[thread_idx];
-	kmt_spin_unlock(&lk);
+	kmt->spin_unlock(&lk);
 
 	return thread->id;
 }
