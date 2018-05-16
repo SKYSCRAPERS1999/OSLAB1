@@ -17,6 +17,17 @@ static void os_init() {
   }
 }
 
+static void f(void *arg) {
+  while (1) {
+    _putc((char)arg);
+  }
+}
+
+static void test_run() {
+  thread_t t1;
+  kmt->create(&t1, f, (void *)'a');
+}
+
 static void os_run() {
 
   printf("Hello, OS World!\n");
