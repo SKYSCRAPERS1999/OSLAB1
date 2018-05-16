@@ -74,7 +74,7 @@ static void kmt_teardown(thread_t *thread){
 static thread_t* kmt_schedule(){
 	int thread_idx = -1, chg = 0;
 	if (cur_id != -1) chg = 1;
-	
+
 	kmt->spin_lock(&lock);
 	for (int i = 0; i < thread_num; i++) {
 		if (chg && i == cur_id) continue;
@@ -84,7 +84,7 @@ static thread_t* kmt_schedule(){
 		}
 	}
 	kmt->spin_unlock(&lock);
-
+	printf("thread_idx,cur_id=%d,%d\n", thread_idx,cur_id);
 	if (thread_idx != -1) return &tlist[thread_idx];
 	else if (cur_id != -1) return &tlist[cur_id];
 	return NULL;
