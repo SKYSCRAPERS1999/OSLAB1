@@ -14,6 +14,8 @@ char* strcat(char*, const char*);
 char* strcmp(const char*, const char*);
 
 void* memset(void*, int, size_t);
+void* memcpy(void*, const void*, size_t);
+
 void srand(int);
 unsigned int rand();
 
