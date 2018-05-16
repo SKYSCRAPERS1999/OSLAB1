@@ -29,15 +29,15 @@ static void test_run() {
   thread_t t1, t2;
   kmt->create(&t1, f, (void *)'a');
   kmt->create(&t2, f, (void *)'b');
-
+  _yield();
 }
 
 static void os_run() {
 
   #ifdef TESTRUN
     test_run();
-  #endif
-  printf("return\n");
+  #endif  
+    printf("return\n");
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
