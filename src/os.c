@@ -30,7 +30,7 @@ static void test_run() {
   _intr_write(1);
   kmt->create(&t1, f, (void *)'a');
   kmt->create(&t2, f, (void *)'b');
-
+  _yield();
 }
 
 static void os_run() {
