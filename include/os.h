@@ -8,7 +8,7 @@
 
 struct spinlock {
   int locked;       // Is the lock held?
-  char *name;        // Name of lock.
+  const char *name;        // Name of lock.
 };
 
 struct thread {
@@ -21,7 +21,7 @@ struct thread {
 struct semaphore {
 	int id;
 	int count;
-	char *name; 
+	const char *name; 
 };
 
 static inline void puts(const char *p) {
