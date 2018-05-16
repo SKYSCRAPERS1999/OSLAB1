@@ -20,7 +20,6 @@ static void os_init() {
 }
 
 static void test_mem(){
-  printf("Hello, OS World!\n");
   for (volatile int sz = 1e5; sz > 0; sz-=1e3){
     void *ptr = pmm->alloc(sz);
     printf("0x%x\n", (int)ptr);
