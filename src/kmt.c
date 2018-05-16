@@ -86,7 +86,7 @@ static thread_t* kmt_schedule(){
 	}
 	
 	//kmt->spin_unlock(&lock);
-	//printf("thread_idx,cur_id=%d,%d\n", thread_idx,cur_id);
+	printf("thread_idx,cur_id=%d,%d\n", thread_idx,cur_id);
 	if (thread_idx != -1) return &tlist[thread_idx];
 	else if (cur_id != -1) return &tlist[cur_id];
 	return NULL;
