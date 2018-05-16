@@ -72,9 +72,9 @@ static void kmt_teardown(thread_t *thread){
 }
 
 static thread_t* kmt_schedule(){
-	int thread_idx = -1, chg = 0;
+	int thread_idx = -1, chg = 1;
 	if (cur_id != -1) chg = 1;
-	
+
 	kmt->spin_lock(&lock);
 	for (int i = 0; i < thread_num; i++) {
 		if (chg && i == cur_id) continue;
