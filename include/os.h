@@ -6,6 +6,10 @@
 
 #include <kernel.h>
 
+typedef struct thread thread_t;
+typedef struct spinlock spinlock_t;
+typedef struct semaphore sem_t;
+
 struct spinlock_t {
   int locked;       // Is the lock held?
   // For debugging:
