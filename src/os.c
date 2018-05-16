@@ -28,6 +28,7 @@ static void f(void* arg) {
 static void test_run() {
   thread_t t1, t2;
   _intr_write(1);
+  _yield();
   kmt->create(&t1, f, (void *)'a');
   kmt->create(&t2, f, (void *)'b');
   _yield();
