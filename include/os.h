@@ -6,19 +6,19 @@
 
 #include <kernel.h>
 
-struct spinlock_t {
+struct spinlock {
   int locked;       // Is the lock held?
   char *name;        // Name of lock.
 };
 
-struct thread_t {
+struct thread {
   int id;
   int freed; //0, 1
   void *kstack;
   _RegSet *reg;
 };
 
-struct semaphore_t {
+struct semaphore {
 	int id;
 	int count;
 	char *name; 
