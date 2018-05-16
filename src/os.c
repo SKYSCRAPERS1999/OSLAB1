@@ -17,12 +17,6 @@ static void os_init() {
   }
 }
 
-static void f(void *arg) {
-  while (1) {
-    _putc((char)arg);
-  }
-}
-
 static void test_mem(){
   printf("Hello, OS World!\n");
   for (volatile int sz = 1e5; sz > 0; sz-=1e3){
@@ -32,6 +26,12 @@ static void test_mem(){
       panic("memory allocation failed");
     }
     pmm->free(ptr);
+  }
+}
+
+static void f(char arg) {
+  while (1) {
+    _putc(arg);
   }
 }
 
