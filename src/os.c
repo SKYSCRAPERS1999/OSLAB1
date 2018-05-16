@@ -31,7 +31,7 @@ static void test_mem(){
 
 static void f(void* arg) {
   while (1) {
-    printf("%c", (char)arg);
+    printf("%c", arg);
   }
 }
 
