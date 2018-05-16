@@ -3,7 +3,7 @@
 
 #define MAXTRD 20
 #define STKSZ (1<<12)
-#define REGSZ (1<<7)
+#define REGSZ (1<<6)
 
 #include <kernel.h>
 
