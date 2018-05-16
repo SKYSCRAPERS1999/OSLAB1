@@ -81,7 +81,7 @@ static thread_t* kmt_schedule(){
 	for (int i = 0; i < thread_num; i++) {
 		if (chg && i == cur_id) continue;
 		if (!tlist[i].freed) {
-			thread_idx = i; 
+			cur_id = thread_idx = i; 
 			break;
 		}
 	}
