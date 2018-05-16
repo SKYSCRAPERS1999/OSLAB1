@@ -64,15 +64,18 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 }
 
 static void kmt_teardown(thread_t *thread){
+	kmt->spin_lock(&lock);
 	pmm->free(thread->kstack);
 	thread->freed = 1;
 	if (thread->id == cur_id) cur_id = -1;
+	kmt->spin_unlock(&lock);
 }
 
 static thread_t* kmt_schedule(){
-	
 	int thread_idx = -1, chg = 0;
 	if (cur_id != -1) chg = 1;
+	
+	kmt->spin_lock(&lock);
 	for (int i = 0; i < thread_num; i++) {
 		if (chg && i == cur_id) continue;
 		if (!tlist[i].freed) {
@@ -80,6 +83,7 @@ static thread_t* kmt_schedule(){
 			break;
 		}
 	}
+	kmt->spin_unlock(&lock);
 
 	if (thread_idx != -1) return &tlist[thread_idx];
 	else if (cur_id != -1) return &tlist[cur_id];
