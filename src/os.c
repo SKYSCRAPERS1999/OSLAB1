@@ -44,14 +44,14 @@ static void producer() {
   while (1) {
     kmt->sem_wait(&empty);
     _putc('(');
-    kmt->sem_post(&fill);
+    kmt->sem_signal(&fill);
   }
 }
 static void consumer(void *arg) {
   while (1) {
     kmt->sem_wait(&fill);
     _putc(')');
-    kmt->sem_post(&empty);
+    kmt->sem_signal(&empty);
   }
 }
 static void test_sem(){
