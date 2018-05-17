@@ -1,7 +1,7 @@
 #include <os.h>
 #include <mylib.h>
 
-#define OSTEST
+//#define OSTEST
 
 static void os_init();
 static void os_run();
