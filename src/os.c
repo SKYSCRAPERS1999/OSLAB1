@@ -39,7 +39,7 @@ static void test_run() {
 static void os_run() {
 
   #ifdef OSTEST
-    //test_run();
+    test_run();
   #endif
 
   printf("return\n");
