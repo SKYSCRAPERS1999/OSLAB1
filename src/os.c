@@ -42,7 +42,7 @@ static void os_run() {
   printf("return\n");
 
   _intr_write(1); // enable interrupt
-  while (1) ; // should never return
+  while (1); // should never return
 }
 
 static int thread_id = -1;
@@ -54,9 +54,9 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   thread_id = t->id;
 
   if (ev.event == _EVENT_IRQ_TIMER) {
-    //#ifndef __LOCAL_TEST__
+    #ifndef __LOCAL_TEST__
       _putc('*');
-    //#endif
+    #endif
   }
   if (ev.event == _EVENT_IRQ_IODEV){
     #ifndef __LOCAL_TEST__
@@ -69,5 +69,5 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
     #endif
     _halt(1);
   }
-  return t->reg; // this is allowed by AM
+  return t ? t->reg : NULL; // this is allowed by AM
 }
