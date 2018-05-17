@@ -34,9 +34,9 @@ static void test_run() {
 
 static void os_run() {
 
-  #ifdef __LOCAL_TEST__
+  //ifdef __LOCAL_TEST__
     test_run();
-  #endif  
+  //#endif  
   _test("return\n");
   
   _intr_write(1); // enable interrupt
