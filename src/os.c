@@ -19,9 +19,10 @@ static void os_init() {
   }
 }
 
-extern spinlock_t lock;
 
 #ifdef OSTEST
+
+extern spinlock_t lock;
 static void f(void* arg) {
   while (1) {
     kmt->spin_lock(&lock);
