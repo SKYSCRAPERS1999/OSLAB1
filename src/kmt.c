@@ -36,7 +36,7 @@ void kmt_init(){
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 
-	kmt->spin_lock(&lock);
+	//kmt->spin_lock(&lock);
 	int thread_idx = -1;
 	for (int i = 0; i < thread_num; i++) {
 		if (tlist[i].freed) {
@@ -58,7 +58,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 	tlist[thread_idx].reg = _make(Tkstack, entry, arg);
 
 	thread = &tlist[thread_idx];
-	kmt->spin_unlock(&lock);
+	//kmt->spin_unlock(&lock);
 
 	return thread->id;
 }
@@ -76,7 +76,7 @@ static thread_t* kmt_schedule(){
 	int thread_idx = -1, chg = 0;
 	if (cur_id != -1) chg = 1;
 
-	kmt->spin_lock(&lock);
+	//kmt->spin_lock(&lock);
 	
 	for (int i = 0; i < thread_num; i++) {
 		if (chg && i == cur_id) continue;
@@ -86,7 +86,7 @@ static thread_t* kmt_schedule(){
 		}
 	}
 	
-	kmt->spin_unlock(&lock);
+	//kmt->spin_unlock(&lock);
 	printf("thread_num,thread_idx,cur_id=%d,%d,%d\n",thread_num, thread_idx,cur_id);
 	if (thread_idx != -1) return &tlist[thread_idx];
 	else if (cur_id != -1) return &tlist[cur_id];
