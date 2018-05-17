@@ -3,7 +3,6 @@
 
 //#define MTTEST
 #define SEMTEST
-#define BUFSZ 2
 
 static void os_init();
 static void os_run();
@@ -55,7 +54,7 @@ static void consumer(void *arg) {
   }
 }
 static void test_sem(){
-  kmt->sem_init(&empty, "empty", BUFSZ);
+  kmt->sem_init(&empty, "empty", SEMBUFSZ);
   kmt->sem_init(&fill, "fill", 0);
   kmt->create(&t1, producer, NULL);
   kmt->create(&t2, consumer, NULL);
