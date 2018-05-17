@@ -18,6 +18,8 @@ static void os_init() {
 }
 
 extern spinlock_t lock;
+
+#ifdef __LOCAL_TEST__
 static void f(void* arg) {
   while (1) {
     kmt->spin_lock(&lock);
@@ -26,22 +28,18 @@ static void f(void* arg) {
     kmt->spin_unlock(&lock);
   }
 }
-
 static void test_run() {
   thread_t t[16];
   for (int i = 0; i < 16; i++) kmt->create(&t[i], f, (void *)('a' + i));
 }
+#endif
 
 static void os_run() {
 
   #ifdef __LOCAL_TEST__
     test_run();
-  #else
-    //if(0) test_run();
-  #endif  
-
-
-  _test("return\n");
+    printf("return\n");
+  #endif
   
   _intr_write(1); // enable interrupt
   while (1) ; // should never return

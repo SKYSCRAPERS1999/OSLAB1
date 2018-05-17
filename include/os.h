@@ -11,12 +11,6 @@
 # define _debug(...) ((void) 0)
 #endif
 
-#ifdef __LOCAL_TEST__
-# define _test(fmt, ...) printf(fmt, ##__VA_ARGS__)
-#else
-# define _test(...) ((void) 0)
-#endif
-
 #define MAXTRD 20
 #define STKSZ (1<<10)
 #define REGSZ (1<<7)
