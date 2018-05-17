@@ -35,7 +35,6 @@ void kmt_init(){
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
-
 	//kmt->spin_lock(&lock);
 	int thread_idx = -1;
 	for (int i = 0; i < thread_num; i++) {
