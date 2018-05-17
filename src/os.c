@@ -57,20 +57,19 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   if (t != NULL) thread_id = t->id;
 
   if (ev.event == _EVENT_IRQ_TIMER) {
-    #ifndef OSTEST
-      printf("in\n");
+    //#ifndef OSTEST
       _putc('*');
-    #endif
+    //endif
   }
   if (ev.event == _EVENT_IRQ_IODEV){
-    #ifndef OSTEST
+    //#ifndef OSTEST
       _putc('I');
-    #endif
+    //#endif
   }
   if (ev.event == _EVENT_ERROR) {
-    #ifndef OSTEST
+    //#ifndef OSTEST
       _putc('x');
-    #endif
+    //#endif
     _halt(1);
   }
 
