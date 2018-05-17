@@ -1,7 +1,7 @@
 #ifndef __OS_H__
 #define __OS_H__
 
-/#define __LOCAL_DEBUG__
+//#define __LOCAL_DEBUG__
 #ifdef __LOCAL_DEBUG__
 # define _debug(fmt, ...) printf("\033[94m%s: " fmt "\n\033[0m", \
     __func__, ##__VA_ARGS__)
