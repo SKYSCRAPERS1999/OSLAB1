@@ -12,7 +12,7 @@
 #define MAXTRD 20
 #define STKSZ (1<<10)
 #define REGSZ (1<<7)
-#define SEMBUFSZ 1
+#define SEMBUFSZ 3
 
 #include <kernel.h>
 
