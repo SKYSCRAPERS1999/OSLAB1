@@ -54,6 +54,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
   if (thread_id != -1) memcpy(tlist[thread_id].reg, regs, REGSZ);
   thread_t *t = kmt->schedule();
+  _putc('H');
   if (t != NULL) thread_id = t->id;
 
   if (ev.event == _EVENT_IRQ_TIMER) {
