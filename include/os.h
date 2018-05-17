@@ -12,7 +12,7 @@
 #endif
 
 #ifdef __LOCAL_TEST__
-# define _test(fmt, ...) printf(fmt)
+# define _test(fmt, ...) printf(fmt, ##__VA_ARGS__);
 #else
 # define _test(...) ((void) 0)
 #endif
