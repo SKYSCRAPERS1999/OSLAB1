@@ -21,7 +21,6 @@ static void os_init() {
 
 
 #ifdef OSTEST
-
 extern spinlock_t lock;
 static void f(void* arg) {
   while (1) {
@@ -43,7 +42,7 @@ static void os_run() {
     test_run();
   #endif
 
-  printf("return\n");
+  printf("start\n");
   _intr_write(1); // enable interrupt
   while (1); // should never return
 }
