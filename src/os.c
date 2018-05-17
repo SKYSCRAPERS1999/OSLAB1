@@ -37,7 +37,7 @@ static void test_run() {
 static void os_run() {
 
   #ifdef __LOCAL_TEST__
-    //test_run();
+    test_run();
   #endif
 
   printf("return\n");
@@ -49,7 +49,7 @@ static int thread_id = -1;
 extern thread_t tlist[MAXTRD];
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-
+  
   if (thread_id != -1) memcpy(tlist[thread_id].reg, regs, REGSZ);
   thread_t *t = kmt->schedule();
   thread_id = t->id;
