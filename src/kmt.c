@@ -109,7 +109,7 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value){
 
 static void kmt_sem_wait(sem_t *sem){
 	--sem->count;
-	if (sem->count < -BUFSZ){
+	if (sem->count < 0){
 		if (cur_id == -1) {
 			panic("No Current Process");
 			return;
