@@ -1,6 +1,14 @@
 #include <os.h>
 #include <mylib.h>
 
+//#define __LOCAL_DEBUG__
+
+#ifdef __LOCAL_DEBUG__
+	#define _debug printf
+#else
+	#define _debug ((void) 0)
+#endif
+
 static void kmt_init();
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg);
 static void kmt_teardown(thread_t *thread);
@@ -64,20 +72,18 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
 }
 
 static void kmt_teardown(thread_t *thread){
-	kmt->spin_lock(&lock);
+	//kmt->spin_lock(&lock);
 	pmm->free(thread->kstack);
 	thread->freed = 1;
 	if (thread->id == cur_id) cur_id = -1;
-	kmt->spin_unlock(&lock);
+	//kmt->spin_unlock(&lock);
 }
 
 static thread_t* kmt_schedule(){
 	
 	int thread_idx = -1, chg = 0;
 	if (cur_id != -1) chg = 1;
-
 	//kmt->spin_lock(&lock);
-	
 	for (int i = 0; i < thread_num; i++) {
 		if (chg && i == cur_id) continue;
 		if (!tlist[i].freed) {
@@ -85,9 +91,8 @@ static thread_t* kmt_schedule(){
 			break;
 		}
 	}
-	
 	//kmt->spin_unlock(&lock);
-	printf("thread_num,thread_idx,cur_id=%d,%d,%d\n",thread_num, thread_idx,cur_id);
+	_debug("thread_num,thread_idx,cur_id=%d,%d,%d\n",thread_num, thread_idx,cur_id);
 	if (thread_idx != -1) return &tlist[thread_idx];
 	else if (cur_id != -1) return &tlist[cur_id];
 	return NULL;
