@@ -40,9 +40,8 @@ static void os_run() {
     test_run();
   #endif
 
-  _intr_write(1); // enable interrupt
   printf("return\n");
-
+  _intr_write(1); // enable interrupt
   while (1); // should never return
 }
 
