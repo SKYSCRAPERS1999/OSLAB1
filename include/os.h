@@ -12,7 +12,7 @@
 #endif
 
 #ifdef __LOCAL_TEST__
-# define _test(fmt, ...) printf("\033[94m%s: " fmt "\n\033[0m", \
+# define _test(fmt, ...) printf("%s: " fmt "\033[0m", \
     __func__, ##__VA_ARGS__)
 #else
 # define _test(...) ((void) 0)
