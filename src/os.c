@@ -89,16 +89,9 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
   #if (!defined(MTTEST) && !defined(SEMTEST))
 
-    if (ev.event == _EVENT_IRQ_TIMER) {
-        _putc('*');
-    }
-    if (ev.event == _EVENT_IRQ_IODEV){
-        _putc('I');
-    }
-    if (ev.event == _EVENT_ERROR) {
-        _putc('x');
-      _halt(1);
-    }
+    if (ev.event == _EVENT_IRQ_TIMER) _putc('*');
+    if (ev.event == _EVENT_IRQ_IODEV) _putc('I');
+    if (ev.event == _EVENT_ERROR) _putc('x'),_halt(1);
 
   #endif
 
