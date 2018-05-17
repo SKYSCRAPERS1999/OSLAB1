@@ -77,9 +77,9 @@ static thread_t* kmt_schedule(){
 	if (cur_id != -1) chg = 1;
 	//kmt->spin_lock(&lock);
 	for (int i = 0, j = rand(); i < thread_num; i++, j = (j+1)%thread_num) {
-		if (chg && i == cur_id) continue;
-		if (!tlist[i].freed) {
-			cur_id = thread_idx = i; 
+		if (chg && j == cur_id) continue;
+		if (!tlist[j].freed) {
+			cur_id = thread_idx = j; 
 			break;
 		}
 	}
