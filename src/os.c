@@ -1,8 +1,6 @@
 #include <os.h>
 #include <mylib.h>
 
-#define TESTRUN
-
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
