@@ -71,7 +71,7 @@ static thread_t* kmt_schedule(){
 	if (!thread_num) return NULL;
 
 	int thread_idx = -1, chg = 0;
-	if (cur_id != -1) chg = 1;
+	//if (cur_id != -1) chg = 1;
 	for (int i = 0, j = rand()%thread_num; i < thread_num; i++, j = (j+1)%thread_num) {
 		if (chg && j == cur_id) continue;
 		if (!tlist[j].freed) {
@@ -109,7 +109,7 @@ static void kmt_sem_init(sem_t *sem, const char *name, int value){
 
 static void kmt_sem_wait(sem_t *sem){
 	--sem->count;
-	if (sem->count < -SEMBUFSZ){
+	if (sem->count < 0){
 		if (cur_id == -1) {
 			panic("No Current Process");
 			return;
