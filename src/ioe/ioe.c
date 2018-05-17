@@ -2,6 +2,10 @@
 #include <amdev.h>
 #include <stdarg.h>
 
+uint32_t uptime(){
+
+	return 1;
+}
 /*
 #define KEYDOWN_MASK 0x8000
 
