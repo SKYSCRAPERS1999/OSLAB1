@@ -32,7 +32,7 @@ thread_t tlist[MAXTRD];
 
 void kmt_init(){
 	kmt->spin_init(&lock, "mutex");
-	//srand(uptime());
+	srand(uptime());
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg){
