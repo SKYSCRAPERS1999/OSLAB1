@@ -19,7 +19,6 @@ static void os_init() {
   }
 }
 
-
 #ifdef OSTEST
 extern spinlock_t lock;
 static void f(void* arg) {
@@ -55,7 +54,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   if (thread_id != -1) memcpy(tlist[thread_id].reg, regs, REGSZ);
   thread_t *t = kmt->schedule();
   if (t != NULL) thread_id = t->id;
-  _putc('H');
+
   if (ev.event == _EVENT_IRQ_TIMER) {
     #ifndef OSTEST
       _putc('*');

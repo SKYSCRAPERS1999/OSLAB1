@@ -14,7 +14,7 @@ static _Device* get_dev(int name){
 	}
 	return NULL;
 }
-
+/*
 uint32_t uptime(){
 	_UptimeReg uptime;
 	_Device* dev = get_dev(_DEV_TIMER);
@@ -50,3 +50,4 @@ void draw_rect(uint32_t *pixels, int x, int y, int w, int h){
 	vdo.pixels = pixels; vdo.x = x; vdo.y = y; vdo.w = w; vdo.h = h; vdo.sync = 1;
 	dev->write(_DEVREG_VIDEO_FBCTL, &vdo, sizeof(vdo));
 }
+*/
