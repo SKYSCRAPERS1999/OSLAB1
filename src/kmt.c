@@ -1,15 +1,6 @@
 #include <os.h>
 #include <mylib.h>
 
-#define __LOCAL_DEBUG__
-
-#ifdef __LOCAL_DEBUG__
-# define _debug(fmt, ...) printf("\033[94m%s: " fmt "\n\033[0m", \
-    __func__, ##__VA_ARGS__)
-#else
-# define _debug(...) ((void) 0)
-#endif
-
 static void kmt_init();
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg);
 static void kmt_teardown(thread_t *thread);
