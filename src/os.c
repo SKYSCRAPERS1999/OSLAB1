@@ -1,6 +1,8 @@
 #include <os.h>
 #include <mylib.h>
 
+#define OSTEST
+
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
@@ -19,26 +21,26 @@ static void os_init() {
 
 extern spinlock_t lock;
 
-//#ifdef __LOCAL_TEST__
-//static void f(void* arg) {
-// while (1) {
-//    kmt->spin_lock(&lock);
-//    for (volatile int i = 0, t = uptime(); uptime() - t < 500 ; i++);
-//    for (volatile int i = 0; i < 20; i++) printf("%c%c", arg, "\0\n"[i==20-1]);
-//    kmt->spin_unlock(&lock);
-//  }
-//}
-//static void test_run() {
-//  thread_t t[16];
-//  for (int i = 0; i < 16; i++) kmt->create(&t[i], f, (void *)('a' + i));
-//}
-//#endif
+#ifdef OSTEST
+static void f(void* arg) {
+  while (1) {
+    kmt->spin_lock(&lock);
+    for (volatile int i = 0, t = uptime(); uptime() - t < 500 ; i++);
+    for (volatile int i = 0; i < 20; i++) printf("%c%c", arg, "\0\n"[i==20-1]);
+    kmt->spin_unlock(&lock);
+  }
+}
+static void test_run() {
+  thread_t t[16];
+  for (int i = 0; i < 16; i++) kmt->create(&t[i], f, (void *)('a' + i));
+}
+#endif
 
 static void os_run() {
 
-  //#ifdef __LOCAL_TEST__
+  #ifdef OSTEST
     //test_run();
-  //#endif
+  #endif
 
   printf("return\n");
   _intr_write(1); // enable interrupt
@@ -55,17 +57,17 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   thread_id = t->id;
 
   if (ev.event == _EVENT_IRQ_TIMER) {
-    #ifndef __LOCAL_TEST__
+    #ifndef OSTEST
       _putc('*');
     #endif
   }
   if (ev.event == _EVENT_IRQ_IODEV){
-    #ifndef __LOCAL_TEST__
+    #ifndef OSTEST
       _putc('I');
     #endif
   }
   if (ev.event == _EVENT_ERROR) {
-    #ifndef __LOCAL_TEST__
+    #ifndef OSTEST
       _putc('x');
     #endif
     _halt(1);
