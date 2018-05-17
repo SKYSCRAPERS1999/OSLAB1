@@ -40,11 +40,25 @@ static void test_run() {
 #ifdef SEMTEST
 static sem_t empty, fill;
 static thread_t t1, t2;
+static void producer() {
+  while (1) {
+    kmt->sem_wait(&empty);
+    _putc('(');
+    kmt->sem_post(&fill);
+  }
+}
+static void consumer(void *arg) {
+  while (1) {
+    kmt->sem_wait(&fill);
+    _putc(')');
+    kmt->sem_post(&empty);
+  }
+}
 static void test_sem(){
   kmt->sem_init(&empty, "empty", BUFSZ);
   kmt->sem_init(&fill, "fill", 0);
-  kmt->create(&t1, pro, NULL);
-  kmt->create(&t2, con, NULL);
+  kmt->create(&t1, producer, NULL);
+  kmt->create(&t2, consumer, NULL);
 }
 #endif
 
@@ -52,6 +66,10 @@ static void os_run() {
 
   #ifdef MTTEST
     test_run();
+  #endif
+
+  #ifdef SEMTEST
+    test_sem();
   #endif
 
   printf("start\n");
