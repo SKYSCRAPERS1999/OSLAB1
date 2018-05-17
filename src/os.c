@@ -72,5 +72,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
     #endif
     _halt(1);
   }
-  return t->reg; // this is allowed by AM
+
+  if (t != NULL) return t->reg; // this is allowed by AM
+  else return NULL;
 }
