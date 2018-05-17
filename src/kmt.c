@@ -69,7 +69,7 @@ static void kmt_teardown(thread_t *thread){
 
 static thread_t* kmt_schedule(){
 	if (!thread_num) return NULL;
-	
+
 	int thread_idx = -1, chg = 0;
 	if (cur_id != -1) chg = 1;
 	for (int i = 0, j = rand()%thread_num; i < thread_num; i++, j = (j+1)%thread_num) {
@@ -102,13 +102,35 @@ static void kmt_spin_unlock(spinlock_t *lk){
 }
 
 static void kmt_sem_init(sem_t *sem, const char *name, int value){
-
+	sem->id = -1;
+	sem->name = name;
+	sem->count = value;
 }
 
 static void kmt_sem_wait(sem_t *sem){
-
+	--sem->count;
+	if (sem->count < 0){
+		if (cur_id == -1) {
+			panic("No Current Process");
+			return;
+		}else{
+			sem->id = cur_id;
+			tlist[sem->id].freed = 1;
+			_yield();
+		}
+	}
 }
 
 static void kmt_sem_signal(sem_t *sem){
-
+	++sem->count;
+	if (sem->count > BUFSZ){
+		if (sem->id == -1) {
+			panic("No Sleeping Process");
+			return;
+		}else{
+			tlist[sem->id].freed = 0;
+			sem->id = -1;
+			_yield();
+		}
+	}
 }

@@ -3,6 +3,7 @@
 
 //#define MTTEST
 #define SEMTEST
+#define BUFSZ 2
 
 static void os_init();
 static void os_run();
@@ -33,6 +34,17 @@ static void f(void* arg) {
 static void test_run() {
   thread_t threads[16];
   for (int i = 0; i < 16; i++) kmt->create(&threads[i], f, (void *)('a' + i));
+}
+#endif
+
+#ifdef SEMTEST
+static sem_t empty, fill;
+static thread_t t1, t2;
+static void test_sem(){
+  kmt->sem_init(&empty, "empty", BUFSZ);
+  kmt->sem_init(&fill, "fill", 0);
+  kmt->create(&t1, pro, NULL);
+  kmt->create(&t2, con, NULL);
 }
 #endif
 
@@ -68,7 +80,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
         _putc('x');
       _halt(1);
     }
-    
+
   #endif
 
   if (t != NULL) return t->reg; // this is allowed by AM
