@@ -1,7 +1,8 @@
 #include <os.h>
 #include <mylib.h>
 
-//#define OSTEST
+//#define MTTEST
+#define SEMTEST
 
 static void os_init();
 static void os_run();
@@ -19,7 +20,7 @@ static void os_init() {
   }
 }
 
-#ifdef OSTEST
+#ifdef MTTEST
 extern spinlock_t lock;
 static void f(void* arg) {
   while (1) {
@@ -37,7 +38,7 @@ static void test_run() {
 
 static void os_run() {
 
-  #ifdef OSTEST
+  #ifdef MTTEST
     test_run();
   #endif
 
@@ -55,22 +56,20 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   thread_t *t = kmt->schedule();
   if (t != NULL) thread_id = t->id;
 
-  if (ev.event == _EVENT_IRQ_TIMER) {
-    #ifndef OSTEST
-      _putc('*');
-    #endif
-  }
-  if (ev.event == _EVENT_IRQ_IODEV){
-    #ifndef OSTEST
-      _putc('I');
-    #endif
-  }
-  if (ev.event == _EVENT_ERROR) {
-    #ifndef OSTEST
-      _putc('x');
-    #endif
-    _halt(1);
-  }
+  #if (!defined(MTTEST) && !defined(SEMTEST))
+
+    if (ev.event == _EVENT_IRQ_TIMER) {
+        _putc('*');
+    }
+    if (ev.event == _EVENT_IRQ_IODEV){
+        _putc('I');
+    }
+    if (ev.event == _EVENT_ERROR) {
+        _putc('x');
+      _halt(1);
+    }
+    
+  #endif
 
   if (t != NULL) return t->reg; // this is allowed by AM
   else return NULL;
