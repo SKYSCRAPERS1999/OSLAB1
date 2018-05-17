@@ -58,7 +58,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
   if (ev.event == _EVENT_IRQ_TIMER) {
     #ifndef OSTEST
-      printf("*");
+      printf("*\n");
     #endif
   }
   if (ev.event == _EVENT_IRQ_IODEV){
