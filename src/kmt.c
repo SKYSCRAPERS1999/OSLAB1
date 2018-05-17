@@ -4,9 +4,10 @@
 //#define __LOCAL_DEBUG__
 
 #ifdef __LOCAL_DEBUG__
-	#define _debug printf
+# define _debug(fmt, ...) printf(stderr, "\033[94m%s: " fmt "\n\033[0m", \
+    __func__, ##__VA_ARGS__)
 #else
-	#define _debug ((void) 0)
+# define _debug(...) ((void) 0)
 #endif
 
 static void kmt_init();
