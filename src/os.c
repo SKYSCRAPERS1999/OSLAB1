@@ -42,6 +42,7 @@ static thread_t t1, t2;
 static void producer() {
   while (1) {
     kmt->sem_wait(&empty);
+    for (volatile int i = 0, t = uptime(); uptime() - t < 300 ; i++);
     _putc('(');
     kmt->sem_signal(&fill);
   }
@@ -49,6 +50,7 @@ static void producer() {
 static void consumer(void *arg) {
   while (1) {
     kmt->sem_wait(&fill);
+    for (volatile int i = 0, t = uptime(); uptime() - t < 300 ; i++);
     _putc(')');
     kmt->sem_signal(&empty);
   }
