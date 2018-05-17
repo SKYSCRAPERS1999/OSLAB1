@@ -36,7 +36,10 @@ static void os_run() {
 
   #ifdef __LOCAL_TEST__
     test_run();
+  #else
+    if(0) test_run();
   #endif  
+
 
   _test("return\n");
   
