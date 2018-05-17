@@ -2,6 +2,7 @@
 #include <amdev.h>
 #include <stdarg.h>
 
+/*
 #define KEYDOWN_MASK 0x8000
 
 static _Device* get_dev(int name){
@@ -14,7 +15,6 @@ static _Device* get_dev(int name){
 	}
 	return NULL;
 }
-/*
 uint32_t uptime(){
 	_UptimeReg uptime;
 	_Device* dev = get_dev(_DEV_TIMER);
