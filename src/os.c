@@ -31,8 +31,8 @@ static void f(void* arg) {
   }
 }
 static void test_run() {
-  thread_t t[16];
-  for (int i = 0; i < 16; i++) kmt->create(&t[i], f, (void *)('a' + i));
+  thread_t threads[16];
+  for (int i = 0; i < 16; i++) kmt->create(&threads[i], f, (void *)('a' + i));
 }
 #endif
 
@@ -57,19 +57,19 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   if (t != NULL) thread_id = t->id;
 
   if (ev.event == _EVENT_IRQ_TIMER) {
-    //#ifndef OSTEST
+    #ifndef OSTEST
       _putc('*');
-    //endif
+    #endif
   }
   if (ev.event == _EVENT_IRQ_IODEV){
-    //#ifndef OSTEST
+    #ifndef OSTEST
       _putc('I');
-    //#endif
+    #endif
   }
   if (ev.event == _EVENT_ERROR) {
-    //#ifndef OSTEST
+    #ifndef OSTEST
       _putc('x');
-    //#endif
+    #endif
     _halt(1);
   }
 
