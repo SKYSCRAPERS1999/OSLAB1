@@ -7,6 +7,7 @@
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
+extern spinlock_t lock;
 
 MOD_DEF(os) {
   .init = os_init,
@@ -21,7 +22,6 @@ static void os_init() {
 }
 
 #ifdef MTTEST
-extern spinlock_t lock;
 static void f(void* arg) {
   while (1) {
     kmt->spin_lock(&lock);
@@ -58,7 +58,7 @@ static void consumer() {
     kmt->spin_unlock(&lock);
     for (volatile int i = 0, t = uptime(); uptime() - t < 100 ; i++);
     _putc(')');
-  
+    kmt->spin_lock(&lock);
     kmt->sem_signal(&empty);
     kmt->spin_unlock(&lock);
   }
