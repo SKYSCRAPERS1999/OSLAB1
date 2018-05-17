@@ -41,26 +41,18 @@ static sem_t empty, fill;
 static thread_t t1, t2;
 static void producer() {
   while (1) {
-    kmt->spin_lock(&lock);
     kmt->sem_wait(&empty);
-    kmt->spin_unlock(&lock);
     for (volatile int i = 0, t = uptime(); uptime() - t < 100 ; i++);
     _putc('(');
-    kmt->spin_lock(&lock);
     kmt->sem_signal(&fill);
-    kmt->spin_unlock(&lock);
   }
 }
 static void consumer() {
   while (1) {
-    kmt->spin_lock(&lock);
     kmt->sem_wait(&fill);
-    kmt->spin_unlock(&lock);
     for (volatile int i = 0, t = uptime(); uptime() - t < 100 ; i++);
     _putc(')');
-    kmt->spin_lock(&lock);
     kmt->sem_signal(&empty);
-    kmt->spin_unlock(&lock);
   }
 }
 static void test_sem(){
