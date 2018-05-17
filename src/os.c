@@ -22,10 +22,10 @@ extern spinlock_t lock;
 #ifdef __LOCAL_TEST__
 static void f(void* arg) {
   while (1) {
-    //kmt->spin_lock(&lock);
+    kmt->spin_lock(&lock);
     for (volatile int i = 0, t = uptime(); uptime() - t < 500 ; i++);
     for (volatile int i = 0; i < 20; i++) printf("%c%c", arg, "\0\n"[i==20-1]);
-    //kmt->spin_unlock(&lock);
+    kmt->spin_unlock(&lock);
   }
 }
 static void test_run() {
@@ -55,19 +55,19 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   thread_id = t->id;
 
   if (ev.event == _EVENT_IRQ_TIMER) {
-    #ifndef __LOCAL_TEST__
+    //#ifndef __LOCAL_TEST__
       _putc('*');
-    #endif
+    //#endif
   }
   if (ev.event == _EVENT_IRQ_IODEV){
-    #ifndef __LOCAL_TEST__
+    //#ifndef __LOCAL_TEST__
       _putc('I');
-    #endif
+    //#endif
   }
   if (ev.event == _EVENT_ERROR) {
-    #ifndef __LOCAL_TEST__
+    //#ifndef __LOCAL_TEST__
       _putc('x');
-    #endif
+    //#endif
     _halt(1);
   }
   return t->reg; // this is allowed by AM
