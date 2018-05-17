@@ -123,14 +123,9 @@ static void kmt_sem_wait(sem_t *sem){
 
 static void kmt_sem_signal(sem_t *sem){
 	++sem->count;
-	if (sem->count > SEMBUFSZ){
-		if (sem->id == -1) {
-			panic("No Sleeping Process");
-			return;
-		}else{
-			tlist[sem->id].freed = 0;
-			sem->id = -1;
-			_yield();
-		}
+	if (sem->id != -1){
+		tlist[sem->id].freed = 0;
+		sem->id = -1;
+		_yield();
 	}
 }
