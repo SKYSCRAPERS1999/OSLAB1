@@ -44,7 +44,7 @@ static void producer() {
     kmt->sem_wait(&empty);
     for (volatile int i = 0, t = uptime(); uptime() - t < 300 ; i++);
     _putc('(');
-    printf("\n%d\n", empty.count,fill.count);
+    printf("\n%d%d\n", empty.count,fill.count);
     kmt->sem_signal(&fill);
   }
 }
@@ -53,7 +53,7 @@ static void consumer() {
     kmt->sem_wait(&fill);
     for (volatile int i = 0, t = uptime(); uptime() - t < 300 ; i++);
     _putc(')');
-    printf("\n%d\n", empty.count,fill.count);
+    printf("\n%d%d\n", empty.count,fill.count);
     kmt->sem_signal(&empty);
   }
 }
