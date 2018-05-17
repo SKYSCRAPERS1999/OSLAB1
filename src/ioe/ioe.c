@@ -2,11 +2,6 @@
 #include <amdev.h>
 #include <stdarg.h>
 
-uint32_t uptime(){
-
-	return 0;
-}
-/*
 #define KEYDOWN_MASK 0x8000
 
 static _Device* get_dev(int name){
@@ -54,4 +49,3 @@ void draw_rect(uint32_t *pixels, int x, int y, int w, int h){
 	vdo.pixels = pixels; vdo.x = x; vdo.y = y; vdo.w = w; vdo.h = h; vdo.sync = 1;
 	dev->write(_DEVREG_VIDEO_FBCTL, &vdo, sizeof(vdo));
 }
-*/
