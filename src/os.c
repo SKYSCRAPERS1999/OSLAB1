@@ -22,7 +22,7 @@ static void os_init() {
 static void f(void* arg) {
   while (1) {
     for (volatile int i = 0; i < 10000000; i++);
-    for (volatile int i = 0; i < 100; i++) printf("%c", arg);
+    for (volatile int i = 0; i < 100; i++) printf("%c%c", arg, " \n"[i==99]);
   }
 }
 
