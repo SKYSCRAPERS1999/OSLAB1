@@ -38,9 +38,9 @@ static void os_run() {
 
   #ifdef __LOCAL_TEST__
     test_run();
-    printf("return\n");
   #endif
-  
+  printf("return\n");
+
   _intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
