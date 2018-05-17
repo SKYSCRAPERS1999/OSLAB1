@@ -22,14 +22,16 @@ static void os_init() {
 static void f(void* arg) {
   while (1) {
     for (volatile int i = 0; i < 10000000; i++);
-    for (volatile int i = 0; i < 100; i++) printf("%c%c", arg, "\0\n"[i==99]);
+    for (volatile int i = 0; i < 20; i++) printf("%c%c", arg, "\0\n"[i==20-1]);
   }
 }
 
 static void test_run() {
-  thread_t t1, t2;
-  kmt->create(&t1, f, (void *)'a');
-  kmt->create(&t2, f, (void *)'b');
+  thread_t t[4];
+  kmt->create(&t[0], f, (void *)'a');
+  kmt->create(&t[1], f, (void *)'b');
+  kmt->create(&t[2], f, (void *)'c');
+  kmt->create(&t[3], f, (void *)'d');
 }
 
 static void os_run() {
@@ -37,6 +39,7 @@ static void os_run() {
   #ifdef TESTRUN
     test_run();
   #endif  
+  printf("return\n");
   printf("return\n");
   
   _intr_write(1); // enable interrupt
