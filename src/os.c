@@ -30,11 +30,8 @@ static void f(void* arg) {
 }
 
 static void test_run() {
-  thread_t t[4];
-  kmt->create(&t[0], f, (void *)'a');
-  kmt->create(&t[1], f, (void *)'b');
-  kmt->create(&t[2], f, (void *)'c');
-  kmt->create(&t[3], f, (void *)'d');
+  thread_t t[16];
+  for (int i = 0; i < 16; i++) kmt->create(&t[i], f, (void *)('a' + i));
 }
 
 static void os_run() {
