@@ -1,7 +1,7 @@
 #include <os.h>
 #include <mylib.h>
 
-//#define __LOCAL_DEBUG__
+#define __LOCAL_DEBUG__
 
 #ifdef __LOCAL_DEBUG__
 # define _debug(fmt, ...) printf(stderr, "\033[94m%s: " fmt "\n\033[0m", \
