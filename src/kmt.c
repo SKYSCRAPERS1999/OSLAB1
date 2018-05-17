@@ -68,6 +68,7 @@ static void kmt_teardown(thread_t *thread){
 }
 
 static thread_t* kmt_schedule(){
+	if (!thread_num) return NULL;
 	
 	int thread_idx = -1, chg = 0;
 	if (cur_id != -1) chg = 1;
