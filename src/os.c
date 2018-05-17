@@ -22,9 +22,9 @@ static void os_init() {
 extern spinlock_t lock;
 static void f(void* arg) {
   while (1) {
-    kmt_spin_lock(&lock);
+    kmt->spin_lock(&lock);
     for (volatile int i = 0; i < 20; i++) printf("%c%c", arg, "\0\n"[i==20-1]);
-    kmt_spin_lock(&lock);
+    kmt->spin_unlock(&lock);
   }
 }
 
