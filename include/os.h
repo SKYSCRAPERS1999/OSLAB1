@@ -2,12 +2,19 @@
 #define __OS_H__
 
 //#define __LOCAL_DEBUG__
+#define __LOCAL_TEST__
 
 #ifdef __LOCAL_DEBUG__
 # define _debug(fmt, ...) printf("\033[94m%s: " fmt "\n\033[0m", \
     __func__, ##__VA_ARGS__)
 #else
 # define _debug(...) ((void) 0)
+#endif
+
+#ifdef __LOCAL_TEST__
+# define _test(fmt, ...) printf(fmt)
+#else
+# define _test(...) ((void) 0)
 #endif
 
 #define MAXTRD 20
