@@ -39,9 +39,10 @@ static void os_run() {
   #ifdef __LOCAL_TEST__
     test_run();
   #endif
-  printf("return\n");
 
   _intr_write(1); // enable interrupt
+  printf("return\n");
+
   while (1); // should never return
 }
 
@@ -69,5 +70,5 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
     #endif
     _halt(1);
   }
-  return t ? t->reg : NULL; // this is allowed by AM
+  return t->reg; // this is allowed by AM
 }
