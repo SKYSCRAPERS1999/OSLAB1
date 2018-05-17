@@ -4,7 +4,7 @@
 
 uint32_t uptime(){
 
-	return 1;
+	return 0;
 }
 /*
 #define KEYDOWN_MASK 0x8000
