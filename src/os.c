@@ -22,7 +22,7 @@ static void f(void* arg) {
   while (1) {
     kmt->spin_lock(&lock);
     for (volatile int i = 0, t = uptime(); uptime() - t < 500 ; i++);
-    for (volatile int i = 0; i < 20; i++) _test("%c%c", arg, "\0\n"[i==20-1]);
+    for (volatile int i = 0; i < 20; i++) printf("%c%c", arg, "\0\n"[i==20-1]);
     kmt->spin_unlock(&lock);
   }
 }
@@ -34,9 +34,10 @@ static void test_run() {
 
 static void os_run() {
 
-  //ifdef __LOCAL_TEST__
+  #ifdef __LOCAL_TEST__
     test_run();
-  //#endif  
+  #endif  
+
   _test("return\n");
   
   _intr_write(1); // enable interrupt
