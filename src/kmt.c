@@ -81,7 +81,7 @@ static thread_t* kmt_schedule(){
 	_debug("thread_num,thread_idx,cur_id=%d,%d,%d\n",thread_num, thread_idx,cur_id);
 	if (thread_idx != -1) return &tlist[thread_idx];
 	else if (cur_id != -1) return &tlist[cur_id];
-	return -1;
+	return NULL;
 }
 
 static void kmt_spin_init(spinlock_t *lk, const char *name){
