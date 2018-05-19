@@ -2,7 +2,7 @@
 #include <mylib.h>
 
 //#define MTTEST
-#define SEMTEST
+//#define SEMTEST
 
 static void os_init();
 static void os_run();
