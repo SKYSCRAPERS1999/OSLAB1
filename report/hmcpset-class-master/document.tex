@@ -1,0 +1,49 @@
+\documentclass[12pt,letterpaper]{hmcpset}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage[slantfont,boldfont]{xeCJK} % ?????????? xeCJK ??
+% info for header block in upper right hand corner
+\name{Lan Fangzhou}
+\class{Report for OSlab1}
+\assignment{2017.5.20}
+\duedate{}
+
+\begin{document}
+
+	\begin{problem}[1.实现pmm.c]
+	\end{problem}
+	\begin{solution}
+	我们在pmm中主要实现alloc函数和free函数.
+	对于alloc函数,我们使用两个链来记录内存的使用情况:其中每一个链上的节点存储一段内存(起始地址和大小). usedList记录已经被使用的内存段,freeList记录尚未被使用的内存段.初始时freeList为整段堆区,usedList为空.每次alloc时将freeList中足够大的一段对齐后放到usedList,free时将usedList中某段放回freeList中.
+	\end{solution}
+
+	\begin{problem}[2.测试kmm.c]
+	\end{problem}
+	\begin{solution}
+		我们试图对kmm进行一点测试.试图进行一系列alloc和free操作,发现当分配空间为几KB时可以正常的分配很长时间,但是当分配空间为几MB时,几十次操作之后,由于回收不全,就会出现问题.
+	\end{solution}	
+	
+	\begin{problem}[3.实现kmt.c]
+	\end{problem}
+	\begin{solution}
+		对于kmt,我们主要根据课程slides和xv6的思想进行实现.
+		自旋锁,线程的结构体定义主要参考xv6.
+		线程的创建:首先在线程池中寻找一个可用的线程,填写相关信息,然后申请一块堆栈kstack,再利用make函数创建一个新的寄存器现场.
+		线程的销毁:删除相关信息,释放内存
+		线程的调度:利用时间作为seed,生成随机数,随机的抽取所有等待的线程进行调度.
+		信号量,自旋锁:参考课程slides实现
+	\end{solution}	
+	
+	\begin{problem}[3.测试kmt.c]
+	\end{problem}
+	\begin{solution}
+		首先测试创建共16个输出字母的线程,运行一段时间没有问题.
+		然后测试生产者-消费者问题,左括号数不会少于右括号数,而且不会同时产生超过BUFSIZE个左括号.
+	\end{solution}	
+	
+	\begin{problem}[3.实现os.c]
+	\end{problem}
+	\begin{solution}
+		在中断处理程序中加入线程相关的内容:保存旧的寄存器现场,切换线程,再返回新的寄存器现场.
+	\end{solution}	
+\end{document}
