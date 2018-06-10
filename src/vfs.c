@@ -3,7 +3,7 @@
 
 static void vfs_init();
 static int vfs_access(const char *, int);
-static int mount(const char *, filesystem_t *);
+static int vfs_mount(const char *, filesystem_t *);
 static int vfs_unmount(const char *path);
 static int vfs_open(const char *, int);
 static ssize_t vfs_read(int, void *, size_t);
