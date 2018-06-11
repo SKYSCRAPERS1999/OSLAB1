@@ -40,15 +40,18 @@ static void writeb(struct filesystem *fs, void *src, int bid) {
 uint8_t mounted[3] = {0,0,0};
 char mounted_name[3][20];
 filesystem_t* FS[3];
+file_t ftable[NFILE];
+
 //fsopt
 
-fsops_t kvfs_ops;
-void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
+fsops_t kvfs_ops, procfs_ops, devfs_ops;
+
+static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 
 	if (strcmp(name, "kvfs") == 0) fs->sb.type = KVFS;
 	else if (strcmp(name, "procfs") == 0) fs->sb.type = PROCFS;
 	else if (strcmp(name, "devfs") == 0) fs->sb.type = DEVFS;
-	else { printf("Undefined fsops name"); return; }
+	else { panic("Undefined fsops name"); return; }
 
 	nmeta = 1 + ninodeblocks + nbitmap;
 	nblocks = FSSIZE - nmeta;
@@ -66,31 +69,91 @@ void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
     writeb(fs, zeroes, fs->sb.bitmap_start);
 }
 
+static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
+
+    return NULL;
+}
+static int fsops_close(inode_t *inode){
+    
+    return 0;
+}
+
 static void create_kvfs() {
   FS[KVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
   if (NULL == FS[KVFS]) panic("fs allocation failed");
   FS[KVFS]->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
   FS[KVFS]->ops->init(FS[KVFS], "kvfs", NULL);
-  vfs->mount("/kv", FS[KVFS]);
+  vfs->mount("/", FS[KVFS]);
+}
+static void create_procfs() {
+  FS[PROCFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
+  if (NULL == FS[PROCFS]) panic("fs allocation failed");
+  FS[PROCFS]->ops = &procfs_ops; // 你为procfs定义的fsops_t，包含函数的实现
+  FS[PROCFS]->ops->init(FS[PROCFS], "procfs", NULL);
+  vfs->mount("/", FS[PROCFS]);
+}
+static void create_devfs() {
+  FS[DEVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
+  if (NULL == FS[DEVFS]) panic("fs allocation failed");
+  FS[DEVFS]->ops = &devfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
+  FS[DEVFS]->ops->init(FS[DEVFS], "devfs", NULL);
+  vfs->mount("/", FS[DEVFS]);
 }
 
-inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
-    return NULL;
+//file
+fileops_t file_ops;
+static struct file* filealloc(){
+  struct file *f;
+  for (f = ftable.file; f < ftable.file + NFILE; f++){
+    if (f->ref == 0){
+ 	  f->ref = 1;
+      return f;
+    }
+  }
+  return 0;
 }
-int fsops_close(inode_t *inode){
-    return 0;
+static int fileops_open(inode_t *inode, file_t *file, int flags){
+	return 0;
 }
+static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size){
+	return 0;
+}
+static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size_t size){
+	return 0;
+}
+static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whence){
+	return 0;
+}
+
 //vfs 
 
 static void vfs_init(){
-	kvfs_ops.init = &fsops_init;
-    kvfs_ops.lookup = &fsops_lookup;
-    kvfs_ops.close = &fsops_close;
-	create_kvfs();
+	kvfs_ops.init = &fsops_init; kvfs_ops.lookup = &fsops_lookup; kvfs_ops.close = &fsops_close;
+    procfs_ops.init = &fsops_init; procfs_ops.lookup = &fsops_lookup; procfs_ops.close = &fsops_close;
+    devfs_ops.init = &fsops_init; devfs_ops.lookup = &fsops_lookup; devfs_ops.close = &fsops_close;
+	create_kvfs(); create_procfs(); create_devfs();
 	return;
 }
 
 static int vfs_access(const char *path, int mode){
+
+	char* lpath = NULL;
+	inode_t* handle = NULL;
+	if ((lpath = strstr(path, "/")) != NULL){
+		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath, mode);
+	}else if ((lpath = strstr(path, "/procfs")) != NULL){
+		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath, mode);
+	}else if ((lpath = strstr(path, "/devfs")) != NULL){
+		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath, mode);
+	}else{
+		panic("Invalid access!");
+		return -1;
+	}
+
+	if (handle == NULL || (handle->type == O_RDONLY && mode == O_WRONLY) || (handle->type == O_WRONLY && mode == O_RDONLY)){
+		panic("Invalid mode!");
+		return -1;
+	}
 
 	return 0;
 }
@@ -105,6 +168,7 @@ static int vfs_unmount(const char *path){
 	else if (strcmp(path, mounted_name[DEVFS]) == 0) mounted[DEVFS] = 0;
 	return 0;
 }
+
 static int vfs_open(const char *path, int flags){
 
 	return 0;

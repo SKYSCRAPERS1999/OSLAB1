@@ -6,15 +6,20 @@
 #define O_RDONLY  0x000
 #define O_WRONLY  0x001
 #define O_RDWR    0x002
+
 #define KVFS  0x000
 #define PROCFS  0x001
 #define DEVFS    0x002
+
+#define T_FILE 0x000
+#define T_DIR 0x001
 
 #define ROOTINO 1  // root i-number
 #define FSSIZE 64  // size of file system in blocks
 #define BSIZE 512  // block size
 #define NDIRECT 12
 #define NINODES 100
+#define NFILE 100
 
 struct fsops {
     void (*init)(filesystem_t *fs, const char *name, inode_t *dev);
@@ -47,7 +52,7 @@ struct filesystem {
     struct {
       uint8_t imap[1*BSIZE];
       uint8_t bitmap[1*BSIZE];
-      uint8_t inodes[5*BSIZE];
+      inode_t inodes[5*BSIZE];
       uint8_t datablk[(FSSIZE-1-1-5)*BSIZE];
     };
   };
@@ -55,18 +60,19 @@ struct filesystem {
 };
 
 struct inode {
-  int inum;          // Inode number
-  int type;         // copy of disk inode
-  int nlink;
+  int ref;        // used
+  int inum;      // Inode number
+  int type;     
   int size;
   int addrs[NDIRECT+1];
 };
 
 struct file {
+  int ref; // used
   int readable;
   int writable;
   struct inode *ip;
-  int off, ref;
+  int off;
 };
 
 // Inodes per block.
@@ -75,3 +81,4 @@ struct file {
 #define IBLOCK(i, sb)     ((i) / IPB)
 
 #endif
+

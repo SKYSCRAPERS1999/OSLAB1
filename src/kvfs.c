@@ -26,19 +26,6 @@ MOD_DEF(kvfile){
 	.lseek = kvfile_lseek,
 };
 
-static struct file* filealloc(){
-  struct file *f;
-  for (f = ftable.file; f < ftable.file + NFILE; f++){
-    if (f->ref == 0){
- 	  f->ref = 1;
-      return f;
-    }
-  }
-  return 0;
-}
-
-
-
 
 void readb(struct filesystem *fs, void *dst, int bid) {  
     memcpy(dst, fs->data + bid * BSIZE, BSIZE);
