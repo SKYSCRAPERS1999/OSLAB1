@@ -51,7 +51,7 @@ struct filesystem {
       uint8_t datablk[(FSSIZE-1-1-5)*BSIZE];
     };
   };
-  fsops_t ops;
+  fsops_t* ops;
 };
 
 struct inode {
