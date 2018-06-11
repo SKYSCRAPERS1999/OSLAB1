@@ -68,10 +68,9 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 
 static void create_kvfs() {
   FS[KVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
-  printf("here\n");
-  if (!FS[KVFS]) panic("fs allocation failed");
+  if (NULL == FS[KVFS]) panic("fs allocation failed");
   FS[KVFS]->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
-  FS[KVFS]->ops->init(FS[KVFS], "procfs", NULL);
+  FS[KVFS]->ops->init(FS[KVFS], "kvfs", NULL);
   vfs->mount("/kv", FS[KVFS]);
 }
 
