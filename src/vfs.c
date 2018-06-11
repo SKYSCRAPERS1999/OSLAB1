@@ -30,7 +30,7 @@ char zeroes[BSIZE];
 uint freeinode = 1, freeblock;
 fsop_t kvfs_ops, procfs_ops, devfs_ops;
 
-filesystem_t *create_kvfs() {
+static filesystem_t *create_kvfs() {
   filesystem_t *fs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
   if (!fs) panic("fs allocation failed");
   fs->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
@@ -39,7 +39,7 @@ filesystem_t *create_kvfs() {
 }
 
 static void vfs_init(){
-	
+	create_kvfs();
 	return;
 }
 static int vfs_access(const char *path, int mode){

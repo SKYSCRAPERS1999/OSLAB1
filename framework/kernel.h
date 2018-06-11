@@ -35,6 +35,9 @@ MODULE {
 typedef struct filesystem filesystem_t;
 typedef struct inode inode_t;
 typedef struct file file_t;
+
+typedef struct superblock superblock_t;
+
 MODULE {
   void (*init)();
   int (*access)(const char *path, int mode);
@@ -55,16 +58,13 @@ MODULE fsops {
   int (*close)(inode_t *inode);
 } MOD_NAME(kvfs);
 
-MODULE fsops {
-  void (*init)(struct filesystem *fs, const char *name, inode_t *dev);
-  inode_t *(*lookup)(struct filesystem *fs, const char *path, int flags);
-  int (*close)(inode_t *inode);
-} MOD_NAME(procfs);
+typedef struct fileops fileops_t;
 
-MODULE fsops {
-  void (*init)(struct filesystem *fs, const char *name, inode_t *dev);
-  inode_t *(*lookup)(struct filesystem *fs, const char *path, int flags);
-  int (*close)(inode_t *inode);
-} MOD_NAME(devfs);
+MODULE fileops{
+  int (*open)(inode_t *inode, file_t *file, int flags);
+  ssize_t (*read)(inode_t *inode, file_t *file, char *buf, size_t size);
+  ssize_t (*write)(inode_t *inode, file_t *file, const char *buf, size_t size);
+  off_t (*lseek)(inode_t *inode, file_t *file, off_t offset, int whence);
+} MOD_NAME(kvfile);
 
 #endif
