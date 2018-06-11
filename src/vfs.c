@@ -39,7 +39,7 @@ static void writeb(struct filesystem *fs, void *src, int bid) {
 
 uint8_t mounted[3] = {0,0,0};
 char mounted_name[20];
-filesystem_t FS[3];
+filesystem_t* FS[3];
 //fsopt
 
 fsops_t kvfs_ops;
@@ -67,14 +67,14 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 
 }
 
-static filesystem_t *create_kvfs() {
-  filesystem_t *fs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
-  if (!fs) panic("fs allocation failed");
-  fs->ops = &FS[KVFS].ops; // 你为kvfs定义的fsops_t，包含函数的实现
-  fs->ops->init(fs, "procfs", NULL);
-  vfs->mount("/kv", fs);
-  return fs;
+static void create_kvfs() {
+  FS[KVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
+  if (!FS[KVFS]) panic("fs allocation failed");
+  FS[KVFS]->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
+  FS[KVFS]->ops->init(fs, "procfs", NULL);
+  vfs->mount("/kv", FS[KVFS]);
 }
+
 static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
     return NULL;
 }
