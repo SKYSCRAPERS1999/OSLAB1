@@ -38,7 +38,7 @@ static void writeb(struct filesystem *fs, void *src, int bid) {
 }
 
 uint8_t mounted[3] = {0,0,0};
-char mounted_name[20];
+char mounted_name[3][20];
 filesystem_t* FS[3];
 //fsopt
 
