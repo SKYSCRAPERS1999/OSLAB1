@@ -60,10 +60,11 @@ struct inode {
 };
 
 struct file {
+  int id;
   int ref; // used
   int readable;
   int writable;
-  struct inode *ip;
+  inode_t *ip;
   int off;
 };
 

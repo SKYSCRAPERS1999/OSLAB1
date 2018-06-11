@@ -103,7 +103,6 @@ static void create_devfs() {
 //file
 fileops_t file_ops;
 
-/*
 static struct file* filealloc(){
   file_t *f;
   for (f = ftable; f < ftable + NFILE; f++){
@@ -126,10 +125,15 @@ static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size
 static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whence){
 	return 0;
 }
-*/
+
 //vfs 
 
 static void vfs_init(){
+	int cnt = 0;
+	for (file_t* f = ftable; f < ftable + NFILE; f++) {
+		f->ref = f->readable = f->writable = f->off = 0;
+		f->id = cnt++; f->ip = NULL;
+	}
 	kvfs_ops.init = &fsops_init; kvfs_ops.lookup = &fsops_lookup; kvfs_ops.close = &fsops_close;
     procfs_ops.init = &fsops_init; procfs_ops.lookup = &fsops_lookup; procfs_ops.close = &fsops_close;
     devfs_ops.init = &fsops_init; devfs_ops.lookup = &fsops_lookup; devfs_ops.close = &fsops_close;
@@ -171,7 +175,26 @@ static int vfs_unmount(const char *path){
 	return 0;
 }
 
-static int vfs_open(const char *path, int flags){
+static int vfs_open(const char *path, int mode/*flags?*/){
+	char* lpath = NULL;
+	inode_t* handle = NULL;
+	if ((lpath = strstr(path, "/")) != NULL){
+		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath, mode);
+	}else if ((lpath = strstr(path, "/procfs")) != NULL){
+		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath, mode);
+	}else if ((lpath = strstr(path, "/devfs")) != NULL){
+		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath, mode);
+	}else{
+		panic("Invalid access!");
+		return -1;
+	}
+	
+	if (handle == NULL || (handle->type == O_RDONLY && mode == O_WRONLY) || (handle->type == O_WRONLY && mode == O_RDONLY)){
+		panic("Invalid mode!");
+		return -1;
+	}
+
+
 
 	return 0;
 }
