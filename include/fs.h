@@ -47,15 +47,7 @@ struct superblock{
 
 struct filesystem { 
   superblock_t sb;
-  union{
-    uint8_t data[FSSIZE*BSIZE];
-    struct {
-      uint8_t imap[1*BSIZE];
-      uint8_t bitmap[1*BSIZE];
-      inode_t inodes[5*BSIZE];
-      uint8_t datablk[(FSSIZE-1-1-5)*BSIZE];
-    };
-  };
+  uint8_t blocks[FSSIZE*BSIZE];
   fsops_t* ops;
 };
 
