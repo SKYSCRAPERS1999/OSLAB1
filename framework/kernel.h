@@ -32,4 +32,39 @@ MODULE {
   void (*sem_signal)(sem_t *sem);
 } MOD_NAME(kmt);
 
+typedef struct filesystem filesystem_t;
+typedef struct inode inode_t;
+typedef struct file file_t;
+MODULE {
+  void (*init)();
+  int (*access)(const char *path, int mode);
+  int (*mount)(const char *path, filesystem_t *fs);
+  int (*unmount)(const char *path);
+  int (*open)(const char *path, int flags);
+  ssize_t (*read)(int fd, void *buf, size_t nbyte);
+  ssize_t (*write)(int fd, void *buf, size_t nbyte);
+  off_t (*lseek)(int fd, off_t offset, int whence);
+  int (*close)(int fd);
+} MOD_NAME(vfs);
+
+typedef struct fsops fsops_t;
+
+MODULE fsops {
+  void (*init)(struct filesystem *fs, const char *name, inode_t *dev);
+  inode_t *(*lookup)(struct filesystem *fs, const char *path, int flags);
+  int (*close)(inode_t *inode);
+} MOD_NAME(kvfs);
+
+MODULE fsops {
+  void (*init)(struct filesystem *fs, const char *name, inode_t *dev);
+  inode_t *(*lookup)(struct filesystem *fs, const char *path, int flags);
+  int (*close)(inode_t *inode);
+} MOD_NAME(procfs);
+
+MODULE fsops {
+  void (*init)(struct filesystem *fs, const char *name, inode_t *dev);
+  inode_t *(*lookup)(struct filesystem *fs, const char *path, int flags);
+  int (*close)(inode_t *inode);
+} MOD_NAME(devfs);
+
 #endif
