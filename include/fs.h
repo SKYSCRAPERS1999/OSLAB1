@@ -6,49 +6,72 @@
 #define O_RDONLY  0x000
 #define O_WRONLY  0x001
 #define O_RDWR    0x002
-#define T_DIR  1   // Directory
-#define T_FILE 2   // File
+#define KVFS  0x000
+#define PROCFS  0x001
+#define DEVFS    0x002
 
 #define ROOTINO 1  // root i-number
 #define FSSIZE 64  // size of file system in blocks
 #define BSIZE 512  // block size
 #define NDIRECT 12
-#define NFILE 100
+#define NINODES 100
+
+struct fsops {
+    void (*init)(filesystem_t *fs, const char *name, inode_t *dev);
+    inode_t *(*lookup)(filesystem_t *fs, const char *path, int flags);
+    int (*close)(inode_t *inode);
+};
+
+struct fileops {
+    int (*open)(inode_t *inode, file_t *file, int flags);
+    ssize_t (*read)(inode_t *inode, file_t *file, char *buf, size_t size);
+    ssize_t (*write)(inode_t *inode, file_t *file, const char *buf, size_t size);
+    off_t (*lseek)(inode_t *inode, file_t *file, off_t offset, int whence);
+};
 
 struct superblock{
-    uint size;         // Size of file system image (blocks)
-    uint nblocks;      // Number of data blocks
-    uint ninodes;      // Number of inodes.
-    uint inodestart;   // Block number of first inode block
-    uint bmapstart;    // Block number of first free map block
+    int type;
+    int size;         // Size of file system image (blocks)
+    int nblocks;      // Number of data blocks
+    int ninodes;      // Number of inodes.
+    int imap_start;
+    int bitmap_start;
+    int inode_start;
+    int datablk_start;
 };
+
 struct filesystem { 
   superblock_t sb;
-  uint8_t ibitmap[BSIZE];
-  uint8_t bbitmap[BSIZE];
-  uint8_t disk[BSIZE * FSSIZE];
+  union{
+    uint8_t data[FSSIZE*BSIZE];
+    struct {
+      uint8_t imap[1*BSIZE];
+      uint8_t bitmap[1*BSIZE];
+      uint8_t inodes[5*BSIZE];
+      uint8_t datablk[(FSSIZE-1-1-5)*BSIZE];
+    };
+  };
   fsops_t ops;
 };
+
 struct inode {
-  uint inum;          // Inode number
-  short type;         // copy of disk inode
-  short nlink;
-  uint size;
-  uint addrs[NDIRECT+1];
+  int inum;          // Inode number
+  int type;         // copy of disk inode
+  int nlink;
+  int size;
+  int addrs[NDIRECT+1];
 };
+
 struct file {
-  char readable;
-  char writable;
+  int readable;
+  int writable;
   struct inode *ip;
-  uint off, ref;
+  int off, ref;
 };
+
 // Inodes per block.
 #define IPB           (BSIZE / sizeof(struct inode))
 // Block containing inode i
-#define IBLOCK(i, sb)     ((i) / IPB + sb.inodestart)
-// Bitmap bits per block
-#define BPB           (BSIZE*8)
-// Block of free map containing bit for block b
-#define BBLOCK(b, sb) (b/BPB + sb.bmapstart)
+#define IBLOCK(i, sb)     ((i) / IPB)
 
 #endif
