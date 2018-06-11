@@ -74,18 +74,18 @@ static void create_kvfs() {
   vfs->mount("/kv", FS[KVFS]);
 }
 
-static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
+inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
     return NULL;
 }
-static int fsops_close(inode_t *inode){
+int fsops_close(inode_t *inode){
     return 0;
 }
 //vfs 
 
 static void vfs_init(){
-	FS[KVFS]->ops->init = &fsops_init;
-    FS[KVFS]->ops->lookup = &fsops_lookup;
-    FS[KVFS]->ops->close = &fsops_close;
+	kvfs_ops.init = &fsops_init;
+    kvfs_ops.lookup = &fsops_lookup;
+    kvfs_ops.close = &fsops_close;
 	create_kvfs();
 	return;
 }
