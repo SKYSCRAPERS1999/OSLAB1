@@ -50,6 +50,7 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	else if (strcmp(name, "devfs") == 0) fs->sb.type = DEVFS;
 	else { printf("Undefined fsops name"); return; }
 
+	printf("here\n");
 	nmeta = 1 + ninodeblocks + nbitmap;
 	nblocks = FSSIZE - nmeta;
 
