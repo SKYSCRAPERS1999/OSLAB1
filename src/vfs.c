@@ -45,7 +45,6 @@ filesystem_t* FS[3];
 fsops_t kvfs_ops;
 static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 
-	printf("here\n");
 	if (strcmp(name, "kvfs") == 0) fs->sb.type = KVFS;
 	else if (strcmp(name, "procfs") == 0) fs->sb.type = PROCFS;
 	else if (strcmp(name, "devfs") == 0) fs->sb.type = DEVFS;
@@ -70,6 +69,7 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 static void create_kvfs() {
   FS[KVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
   if (NULL == FS[KVFS]) panic("fs allocation failed");
+  printf("here\n");
   FS[KVFS]->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
   FS[KVFS]->ops->init(FS[KVFS], "kvfs", NULL);
   vfs->mount("/kv", FS[KVFS]);
