@@ -30,9 +30,9 @@ int nbitmap = 1, nimap = 1, ninodeblocks = 5;
 int nmeta;    // Number of meta blocks (boot, sb, nlog, inode, bitmap)
 int nblocks;  // Number of data blocks
 char zeroes[BSIZE];
-static void readb(struct filesystem *fs, void *dst, int bid) {  
+/*static void readb(struct filesystem *fs, void *dst, int bid) {  
     memcpy(dst, fs->data + bid * BSIZE, BSIZE);
-}
+}*/
 static void writeb(struct filesystem *fs, void *src, int bid) {
     memcpy(fs->data + bid * BSIZE, src, BSIZE);
 }
@@ -64,8 +64,6 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	printf("nmeta %d (inode blocks %u, bitmap blocks %u) blocks %d total %d\n", nmeta, ninodeblocks, nbitmap, nblocks, FSSIZE);
     writeb(fs, zeroes, fs->sb.imap_start);
     writeb(fs, zeroes, fs->sb.bitmap_start);
-    readb(NULL, fs, fs->sb.bitmap_start);
-
 }
 
 static void create_kvfs() {
