@@ -62,8 +62,8 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	fs->sb.datablk_start = nbitmap + nimap + ninodeblocks;
 
 	printf("nmeta %d (inode blocks %u, bitmap blocks %u) blocks %d total %d\n", nmeta, ninodeblocks, nbitmap, nblocks, FSSIZE);
-    writeb(fs, zeroes, imap_start);
-    writeb(fs, zeroes, bitmap_start);
+    writeb(fs, zeroes, fs->sb.imap_start);
+    writeb(fs, zeroes, fs->sb.bitmap_start);
 
 }
 
