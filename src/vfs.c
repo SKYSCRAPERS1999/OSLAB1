@@ -102,6 +102,8 @@ static void create_devfs() {
 
 //file
 fileops_t file_ops;
+
+/*
 static struct file* filealloc(){
   file_t *f;
   for (f = ftable; f < ftable + NFILE; f++){
@@ -124,7 +126,7 @@ static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size
 static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whence){
 	return 0;
 }
-
+*/
 //vfs 
 
 static void vfs_init(){
