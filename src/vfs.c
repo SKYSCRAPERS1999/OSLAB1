@@ -103,7 +103,7 @@ static void create_devfs() {
 //file
 fileops_t file_ops;
 static struct file* filealloc(){
-  struct file *f;
+  file_t *f;
   for (f = ftable.file; f < ftable.file + NFILE; f++){
     if (f->ref == 0){
  	  f->ref = 1;
