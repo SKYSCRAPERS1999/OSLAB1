@@ -26,21 +26,13 @@ MOD_DEF(vfs){
 
 file_t file_table[NINODES];
 
-int nbitmap = 1, nimap = 1, ninodeblocks = 5;
 int nmeta;    // Number of meta blocks (boot, sb, nlog, inode, bitmap)
 int nblocks;  // Number of data blocks
-char zeroes[BSIZE];
-/*static void readb(struct filesystem *fs, void *dst, int bid) {  
-    memcpy(dst, fs->blocks + bid * BSIZE, BSIZE);
-}*/
-static void writeb(struct filesystem *fs, void *src, int bid) {
-    memcpy(fs->blocks + bid * BSIZE, src, BSIZE);
-}
 
 uint8_t mounted[3] = {0,0,0};
 char mounted_name[3][20];
 filesystem_t* FS[3];
-file_t ftable[NFILE];
+file_t* ftable[NFILE];
 
 //fsopt
 
@@ -59,14 +51,6 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	fs->sb.size = FSSIZE;
 	fs->sb.nblocks = nblocks;
 	fs->sb.ninodes = NINODES;
-	fs->sb.imap_start = 0;
-	fs->sb.bitmap_start = nimap;
-	fs->sb.inode_start = nbitmap + nimap;
-	fs->sb.datablk_start = nbitmap + nimap + ninodeblocks;
-
-	printf("nmeta %d (inode blocks %d, bitmap blocks %d) blocks %d total %d\n", nmeta, ninodeblocks, nbitmap + nimap, nblocks, FSSIZE);
-    writeb(fs, zeroes, fs->sb.imap_start);
-    writeb(fs, zeroes, fs->sb.bitmap_start);
 }
 
 static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
@@ -101,18 +85,14 @@ static void create_devfs() {
 }
 
 //file
-fileops_t file_ops;
-
-static struct file* filealloc(){
-  file_t *f;
-  for (f = ftable; f < ftable + NFILE; f++){
-    if (f->ref == 0){
- 	  f->ref = 1;
-      return f;
-    }
+static int find_file(int fd){
+  file_t *f; int cnt = 0;
+  for (f = ftable; f < ftable + NFILE; f++, cnt++){
+    if (f->ref == 1 && f->fd = fd) return cnt;
   }
-  return 0;
+  return -1;
 }
+
 static int fileops_open(inode_t *inode, file_t *file, int flags){
 	return 0;
 }
@@ -146,11 +126,11 @@ static int vfs_access(const char *path, int mode){
 	char* lpath = NULL;
 	inode_t* handle = NULL;
 	if ((lpath = strstr(path, "/")) != NULL){
-		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath, mode);
+		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath + strlen("/"), mode);
 	}else if ((lpath = strstr(path, "/procfs")) != NULL){
-		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath, mode);
+		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath + strlen("/procfs"), mode);
 	}else if ((lpath = strstr(path, "/devfs")) != NULL){
-		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath, mode);
+		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath + strlen("/devfs"), mode);
 	}else{
 		panic("Invalid access!");
 		return -1;
@@ -163,11 +143,13 @@ static int vfs_access(const char *path, int mode){
 
 	return 0;
 }
+
 static int vfs_mount(const char *path, filesystem_t *fs){
 	mounted[fs->sb.type] = 1;
 	strcpy(mounted_name[fs->sb.type], path);
 	return 0;
 }
+
 static int vfs_unmount(const char *path){
 	if (strcmp(path, mounted_name[KVFS]) == 0) mounted[KVFS] = 0;
 	else if (strcmp(path, mounted_name[PROCFS]) == 0) mounted[PROCFS] = 0;
@@ -179,11 +161,11 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	char* lpath = NULL;
 	inode_t* handle = NULL;
 	if ((lpath = strstr(path, "/")) != NULL){
-		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath, mode);
+		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath + strlen("/"), mode);
 	}else if ((lpath = strstr(path, "/procfs")) != NULL){
-		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath, mode);
+		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath + strlen("/procfs"), mode);
 	}else if ((lpath = strstr(path, "/devfs")) != NULL){
-		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath, mode);
+		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath + strlen("/devfs"), mode);
 	}else{
 		panic("Invalid access!");
 		return -1;
@@ -194,23 +176,41 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 		return -1;
 	}
 
-
-
-	return 0;
+	file_t* f = (file_t *)pmm->alloc(sizeof(file_t));
+	if (f == NULL) {
+		panic("Allocation failed"); return -1;
+	}
+	int fd = fileops_open(inode, file, mode); 
+	int cnt;
+	for (cnt = 0; cnt < NFILE; cnt++){
+		if (ftable[cnt]->ref == 0) {
+			ftable[cnt] = f;
+			ftable[cnt]->ref = 1;
+		}
+	}
+	if (cnt >= NFILE){
+		panic("Allocation failed"); return -1;
+	}
+	return fd;
 }
 static ssize_t vfs_read(int fd, void *buf, size_t nbyte){
-
-	return 0;
+	int p = find_file(fd);
+    if (p == -1) return -1;
+    return fileops_read(ftable[p]->f_inode, ftable[p], buf, nbyte);
 }
 static ssize_t vfs_write(int fd, void *buf, size_t nbyte){
-
-	return 0;
+	int p = find_file(fd);
+    if (p == -1) return -1;
+    return fileops_write(ftable[p]->f_inode, ftable[p], buf, nbyte);
 }
 static off_t vfs_lseek(int fd, off_t offset, int whence){
-
-	return 0;
+	int p = find_file(fd);
+    if (p == -1) return -1;
+    return fileops_lseek(ftable[p]->f_inode, ftable[p], buf, nbyte);
 }
 static int vfs_close(int fd){
-
+	int p = find_file(fd);
+    if (p == -1) return -1;
+    return fileops_close(ftable[p]->f_inode, ftable[p], buf, nbyte);
 	return 0;
 }

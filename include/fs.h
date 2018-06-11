@@ -39,15 +39,10 @@ struct superblock{
     int size;         // Size of file system image (blocks)
     int nblocks;      // Number of data blocks
     int ninodes;      // Number of inodes.
-    int imap_start;
-    int bitmap_start;
-    int inode_start;
-    int datablk_start;
 };
 
 struct filesystem { 
   superblock_t sb;
-  uint8_t blocks[FSSIZE*BSIZE];
   fsops_t* ops;
 };
 
@@ -60,7 +55,7 @@ struct inode {
 };
 
 struct file {
-  int id;
+  int fd;
   int ref; // used
   int readable;
   int writable;
