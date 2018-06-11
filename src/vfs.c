@@ -71,7 +71,7 @@ static void create_kvfs() {
   FS[KVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
   if (!FS[KVFS]) panic("fs allocation failed");
   FS[KVFS]->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
-  FS[KVFS]->ops->init(fs, "procfs", NULL);
+  FS[KVFS]->ops->init(FS[KVFS], "procfs", NULL);
   vfs->mount("/kv", FS[KVFS]);
 }
 
