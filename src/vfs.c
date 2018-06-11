@@ -84,9 +84,9 @@ static int fsops_close(inode_t *inode){
 //vfs 
 
 static void vfs_init(){
-	FS[KVFS].ops.init = &fsops_init;
-    FS[KVFS].ops.lookup = &fsops_lookup;
-    FS[KVFS].ops.close = &fsops_close;
+	FS[KVFS]->ops->init = &fsops_init;
+    FS[KVFS]->ops->lookup = &fsops_lookup;
+    FS[KVFS]->ops->close = &fsops_close;
 	create_kvfs();
 	return;
 }
