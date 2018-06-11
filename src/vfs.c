@@ -96,8 +96,8 @@ static int vfs_access(const char *path, int mode){
 	return 0;
 }
 static int vfs_mount(const char *path, filesystem_t *fs){
-	mounted[fs->type] = 1;
-	strcpy(mounted_name[fs->type], path);
+	mounted[fs->sb->type] = 1;
+	strcpy(mounted_name[fs->sb->type], path);
 	return 0;
 }
 static int vfs_unmount(const char *path){
