@@ -31,10 +31,10 @@ int nmeta;    // Number of meta blocks (boot, sb, nlog, inode, bitmap)
 int nblocks;  // Number of data blocks
 char zeroes[BSIZE];
 /*static void readb(struct filesystem *fs, void *dst, int bid) {  
-    memcpy(dst, fs->data + bid * BSIZE, BSIZE);
+    memcpy(dst, fs->blocks + bid * BSIZE, BSIZE);
 }*/
 static void writeb(struct filesystem *fs, void *src, int bid) {
-    memcpy(fs->data + bid * BSIZE, src, BSIZE);
+    memcpy(fs->blocks + bid * BSIZE, src, BSIZE);
 }
 
 uint8_t mounted[3] = {0,0,0};
