@@ -48,7 +48,7 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	if (strcmp(name, "kvfs") == 0) fs->sb.type = KVFS;
 	else if (strcmp(name, "procfs") == 0) fs->sb.type = PROCFS;
 	else if (strcmp(name, "devfs") == 0) fs->sb.type = DEVFS;
-	else { perror("Undefined fsops name"); return; }
+	else { printf("Undefined fsops name"); return; }
 
 	nmeta = 1 + ninodeblocks + nbitmap;
 	nblocks = FSSIZE - nmeta;
