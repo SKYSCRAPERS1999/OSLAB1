@@ -123,8 +123,8 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 	}
 	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
 	if (len < 0) len = 0;
-	memcpy(buf, inode->data + file->off, len);
-	buf[size] = '\0';
+	memcpy(buf, inode->data + file->off, len); 
+	buf[len] = '\0';
 	file->off += len;
 	return len;
 }
