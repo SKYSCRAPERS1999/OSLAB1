@@ -80,6 +80,24 @@ static void test_file(){
   printf("rsiz = %d\n", ret);
   printf("%s\n", rbuf);
 
+  strcpy(wbuf, "Hello JYY!");
+  fd = vfs->open("/Document/b.txt", O_RDWR);
+  ret = vfs->write(fd, wbuf, strlen(wbuf));  
+  printf("wsiz = %d\n", ret);
+  vfs->lseek(fd, 0, 0);
+  ret = vfs->read(fd, rbuf, 20);
+  printf("rsiz = %d\n", ret);
+  printf("%s\n", rbuf);
+
+  strcpy(wbuf, "Hello Three_Pupils!");
+  fd = vfs->open("/Document/b.txt", O_RDWR);
+  ret = vfs->write(fd, wbuf, strlen(wbuf));  
+  printf("wsiz = %d\n", ret);
+  vfs->lseek(fd, 0, 0);
+  ret = vfs->read(fd, rbuf, 20);
+  printf("rsiz = %d\n", ret);
+  printf("%s\n", rbuf);
+
 }
 
 #endif
