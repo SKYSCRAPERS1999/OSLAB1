@@ -70,6 +70,7 @@ static void test_sem(){
 static void test_file(){
 
   char wbuf[MAXDATASZ];
+  char rbuf[MAXDATASZ];
   strcpy(wbuf, "Hello World!");
 
   int fd = vfs->open("/Document/a.txt", O_RDWR);
