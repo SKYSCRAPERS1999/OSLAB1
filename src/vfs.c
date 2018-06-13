@@ -24,33 +24,20 @@ MOD_DEF(vfs){
 	.close = vfs_close,
 };
 
-file_t file_table[NINODES];
-
-int nmeta;    // Number of meta blocks (boot, sb, nlog, inode, bitmap)
-int nblocks;  // Number of data blocks
-
 uint8_t mounted[3] = {0,0,0};
 char mounted_name[3][20];
 filesystem_t* FS[3];
-file_t* ftable[NFILE];
 
+file_t* ftable[MAXFILENUM];
 //fsopt
 
 fsops_t kvfs_ops, procfs_ops, devfs_ops;
 
 static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
-
-	if (strcmp(name, "kvfs") == 0) fs->sb.type = KVFS;
-	else if (strcmp(name, "procfs") == 0) fs->sb.type = PROCFS;
-	else if (strcmp(name, "devfs") == 0) fs->sb.type = DEVFS;
+	if (strcmp(name, "kvfs") == 0) fs->type = KVFS;
+	else if (strcmp(name, "procfs") == 0) fs->type = PROCFS;
+	else if (strcmp(name, "devfs") == 0) fs->type = DEVFS;
 	else { panic("Undefined fsops name"); return; }
-
-	nmeta = 1 + ninodeblocks + nbitmap;
-	nblocks = FSSIZE - nmeta;
-
-	fs->sb.size = FSSIZE;
-	fs->sb.nblocks = nblocks;
-	fs->sb.ninodes = NINODES;
 }
 
 static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
@@ -79,21 +66,21 @@ static void create_procfs() {
 static void create_devfs() {
   FS[DEVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
   if (NULL == FS[DEVFS]) panic("fs allocation failed");
-  FS[DEVFS]->ops = &devfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
+  FS[DEVFS]->ops = &devfs_ops; // 你为devfs定义的fsops_t，包含函数的实现
   FS[DEVFS]->ops->init(FS[DEVFS], "devfs", NULL);
   vfs->mount("/", FS[DEVFS]);
 }
 
 //file
 static int find_file(int fd){
-  file_t *f; int cnt = 0;
-  for (f = ftable; f < ftable + NFILE; f++, cnt++){
-    if (f->ref == 1 && f->fd = fd) return cnt;
+  for (int i = 0; i < NFILE; i++){
+    if (f != NULL && f->fd = fd) return cnt;
   }
   return -1;
 }
 
 static int fileops_open(inode_t *inode, file_t *file, int flags){
+	
 	return 0;
 }
 static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size){
@@ -109,11 +96,9 @@ static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whenc
 //vfs 
 
 static void vfs_init(){
-	int cnt = 0;
-	for (file_t* f = ftable; f < ftable + NFILE; f++) {
-		f->ref = f->readable = f->writable = f->off = 0;
-		f->id = cnt++; f->ip = NULL;
-	}
+	for (int i = 0; i < NFILE; i++){
+    	ftable[i] = NULL;
+  	}
 	kvfs_ops.init = &fsops_init; kvfs_ops.lookup = &fsops_lookup; kvfs_ops.close = &fsops_close;
     procfs_ops.init = &fsops_init; procfs_ops.lookup = &fsops_lookup; procfs_ops.close = &fsops_close;
     devfs_ops.init = &fsops_init; devfs_ops.lookup = &fsops_lookup; devfs_ops.close = &fsops_close;
@@ -145,8 +130,8 @@ static int vfs_access(const char *path, int mode){
 }
 
 static int vfs_mount(const char *path, filesystem_t *fs){
-	mounted[fs->sb.type] = 1;
-	strcpy(mounted_name[fs->sb.type], path);
+	mounted[fs->type] = 1;
+	strcpy(mounted_name[fs->type], path);
 	return 0;
 }
 

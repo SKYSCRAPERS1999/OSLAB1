@@ -18,8 +18,9 @@
 #define FSSIZE 64  // size of file system in blocks
 #define BSIZE 512  // block size
 #define NDIRECT 12
-#define NINODES 100
-#define NFILE 100
+#define NINODES 64
+#define NFILE 64
+#define MAXFILENUM 1024
 
 struct fsops {
     void (*init)(filesystem_t *fs, const char *name, inode_t *dev);
@@ -34,16 +35,10 @@ struct fileops {
     off_t (*lseek)(inode_t *inode, file_t *file, off_t offset, int whence);
 };
 
-struct superblock{
-    int type;
-    int size;         // Size of file system image (blocks)
-    int nblocks;      // Number of data blocks
-    int ninodes;      // Number of inodes.
-};
-
 struct filesystem { 
-  superblock_t sb;
+  int type;
   fsops_t* ops;
+  inode_t* inodes[NINODES];
 };
 
 struct inode {
@@ -51,7 +46,7 @@ struct inode {
   int inum;      // Inode number
   int type;     
   int size;
-  int addrs[NDIRECT+1];
+  file_t* files[NDIRECT+1];
 };
 
 struct file {
@@ -59,8 +54,8 @@ struct file {
   int ref; // used
   int readable;
   int writable;
-  inode_t *ip;
   int off;
+  inode_t* f_inode;
 };
 
 // Inodes per block.
