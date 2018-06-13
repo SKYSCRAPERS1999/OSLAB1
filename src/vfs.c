@@ -87,7 +87,7 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	file->mode = mode;
 	file->off = 0;
 	for (int i = 0; i < NDIRECT; i++){
-		if (inode->file[i] != NULL && inode->file[i]->fd = file->fd){
+		if (inode->file[i] != NULL && inode->file[i]->fd == file->fd){
 			return file->fd;	
 		} 
 	}
@@ -102,7 +102,7 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	return -1;
 }
 static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size){
-	if (inode == NULL || mode == O_WRONLY) {
+	if (inode == NULL || file->mode == O_WRONLY) {
 		panic("Invalid mode or inode!");
 	}
 	strcpy(buf, inode->data + off);
