@@ -131,7 +131,7 @@ static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whenc
 static int fileops_close(inode_t *inode, file_t *file, int p){
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] != NULL && inode->file[i]->fd == file->fd){
-			inode->file[i] = NULL
+			inode->file[i] = NULL;
 			break;
 		}
 	}
@@ -214,7 +214,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	int fd = fileops_open(handle, f, mode); 
 	int cnt;
 	for (cnt = 0; cnt < NFILE; cnt++){
-		if (ftable[cnt] == NULL || ftable[cnt]->ref = 0) {
+		if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {
 			ftable[cnt] = f;
 			ftable[cnt]->ref = 1;
 			break;
