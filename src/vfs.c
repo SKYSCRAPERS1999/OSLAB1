@@ -29,6 +29,8 @@ char mounted_name[3][20];
 filesystem_t* FS[3];
 
 file_t* ftable[MAXFILENUM];
+int nfd = 0; // next fd
+
 //fsopt
 
 fsops_t kvfs_ops, procfs_ops, devfs_ops;
@@ -109,11 +111,14 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	}
 	file->mode = mode;
 	file->off = 0;
+	
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] != NULL && inode->file[i]->fd == file->fd){
 			return file->fd;	
 		} 
 	}
+
+	file->fd = fd++;
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] == NULL) {
 			inode->file[i] = file;
@@ -246,6 +251,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	if (f == NULL) {
 		_debug("Allocation failed"); return -1;
 	}
+
 	int fd = fileops_open(handle, f, mode); 
 	
 	_debug("fd = %d", fd);
@@ -253,8 +259,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	int cnt;
 	for (cnt = 0; cnt < NFILE; cnt++){
 		if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {
-			f->fd = cnt;
-			ftable[cnt] = f;
+]			ftable[cnt] = f;
 			ftable[cnt]->ref = 1;
 			break;
 		}
