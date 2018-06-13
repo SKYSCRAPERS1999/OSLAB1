@@ -73,36 +73,37 @@ static void test_file(){
 
   strcpy(wbuf, "Hello World!");
   printf("%s\n", wbuf);
-  int fd = vfs->open("/Document/a.txt", O_RDWR);
-  int ret = vfs->write(fd, wbuf, strlen(wbuf));  
-  printf("wsiz = %d\n", ret);
-  vfs->lseek(fd, 0, 0);
-  ret = vfs->read(fd, rbuf, 20);
-  printf("rsiz = %d\n", ret);
+  int fd1 = vfs->open("/Document/a.txt", O_RDWR);
+  int ret1 = vfs->write(fd1, wbuf, strlen(wbuf));  
+  printf("wsiz = %d\n", ret1);
+  vfs->lseek(fd1, 0, 0);
+  ret1 = vfs->read(fd1, rbuf, 20);
+  printf("rsiz = %d\n", ret1);
   printf("%s\n\n", rbuf);
-  //vfs->close(fd);
 
   strcpy(wbuf, "Hello JYY!");
   printf("%s\n", wbuf);
-  fd = vfs->open("/Document/b.txt", O_RDWR);
-  ret = vfs->write(fd, wbuf, strlen(wbuf));  
-  printf("wsiz = %d\n", ret);
-  vfs->lseek(fd, 0, 0);
-  ret = vfs->read(fd, rbuf, 20);
-  printf("rsiz = %d\n", ret);
+  int fd2 = vfs->open("/Document/b.txt", O_RDWR);
+  int ret2 = vfs->write(fd2, wbuf, strlen(wbuf));  
+  printf("wsiz = %d\n", ret2);
+  vfs->lseek(fd2, 0, 0);
+  ret2 = vfs->read(fd2, rbuf, 20);
+  printf("rsiz = %d\n", ret2);
   printf("%s\n\n", rbuf);
-  //vfs->close(fd);
 
   strcpy(wbuf, "Hello Three_Pupils!");
   printf("%s\n", wbuf);
-  fd = vfs->open("/Document/c.txt", O_RDWR);
-  ret = vfs->write(fd, wbuf, strlen(wbuf));  
-  printf("wsiz = %d\n", ret);
-  vfs->lseek(fd, 0, 0);
-  ret = vfs->read(fd, rbuf, 20);
-  printf("rsiz = %d\n", ret);
+  int fd3 = vfs->open("/Document/c.txt", O_RDWR);
+  int ret3 = vfs->write(fd3, wbuf, strlen(wbuf));  
+  printf("wsiz = %d\n", ret3);
+  vfs->lseek(fd3, 0, 0);
+  ret3 = vfs->read(fd3, rbuf, 20);
+  printf("rsiz = %d\n", ret3);
   printf("%s\n\n", rbuf);
-  //vfs->close(fd);
+
+  vfs->close(fd1);
+  vfs->close(fd2);
+  vfs->close(fd3);
 
 }
 
