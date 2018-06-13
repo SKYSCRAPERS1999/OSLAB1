@@ -79,12 +79,35 @@ static int find_file(int fd){
   return -1;
 }
 
-static int fileops_open(inode_t *inode, file_t *file, int flags){
-
-	return 0;
+static int fileops_open(inode_t *inode, file_t *file, int mode){
+	if (inode == NULL || (inode->type == O_RDONLY && mode == O_WRONLY) || (inode->type == O_WRONLY && mode == O_RDONLY)){
+		panic("Invalid mode or inode!");
+		return -1;
+	}
+	file->mode = mode;
+	file->off = 0;
+	for (int i = 0; i < NDIRECT; i++){
+		if (inode->file[i] != NULL && inode->file[i]->fd = file->fd){
+			return file->fd;	
+		} 
+	}
+	for (int i = 0; i < NDIRECT; i++){
+		if (inode->file[i] == NULL) {
+			inode->file[i] = file;
+			file->inode = inode;
+			return file->fd;
+		}
+	}
+	panic("Maybe insufficient inode space");
+	return -1;
 }
 static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size){
-	return 0;
+	if (inode == NULL || mode == O_WRONLY) {
+		panic("Invalid mode or inode!");
+	}
+	strcpy(buf, inode->data + off);
+	file->off += strlen(buf);
+	return strlen(buf);
 }
 static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size_t size){
 	return 0;
@@ -171,9 +194,10 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	int fd = fileops_open(handle, f, mode); 
 	int cnt;
 	for (cnt = 0; cnt < NFILE; cnt++){
-		if (ftable[cnt]->ref == 0) {
+		if (ftable[cnt] == NULL || ftable[cnt]->ref = 0) {
 			ftable[cnt] = f;
 			ftable[cnt]->ref = 1;
+			break;
 		}
 	}
 	if (cnt >= NFILE){
@@ -184,22 +208,22 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 static ssize_t vfs_read(int fd, void *buf, size_t nbyte){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_read(ftable[p]->f_inode, ftable[p], buf, nbyte);
+    return fileops_read(ftable[p]->inode, ftable[p], buf, nbyte);
 }
 static ssize_t vfs_write(int fd, void *buf, size_t nbyte){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_write(ftable[p]->f_inode, ftable[p], buf, nbyte);
+    return fileops_write(ftable[p]->inode, ftable[p], buf, nbyte);
 }
 static off_t vfs_lseek(int fd, off_t offset, int whence){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_lseek(ftable[p]->f_inode, ftable[p], offset, whence);
+    return fileops_lseek(ftable[p]->inode, ftable[p], offset, whence);
 }
 
 static int vfs_close(int fd){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_close(ftable[p]->f_inode, ftable[p]);
+    return fileops_close(ftable[p]->inode, ftable[p]);
 	return 0;
 }

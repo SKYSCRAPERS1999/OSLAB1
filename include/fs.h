@@ -20,7 +20,8 @@
 #define NDIRECT 12
 #define NINODES 64
 #define NFILE 64
-#define MAXFILENUM 1024
+#define MAXFILENUM 128
+#define MAXDATASZ 4096
 
 struct fsops {
     void (*init)(filesystem_t *fs, const char *name, inode_t *dev);
@@ -46,14 +47,14 @@ struct inode {
   int inum;      // Inode number
   int type;     
   int size;
-  file_t* files[NDIRECT+1];
+  file_t* files[NDIRECT];
+  char data[MAXDATASZ];
 };
 
 struct file {
   int fd;
   int ref; // used
-  int readable;
-  int writable;
+  int mode;
   int off;
   inode_t* f_inode;
 };
