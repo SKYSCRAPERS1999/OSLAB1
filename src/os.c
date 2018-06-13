@@ -73,7 +73,7 @@ static void test_file(){
   strcpy(buf, "Hello World!");
 
   vfs->open("/Document/a.txt", O_RDWR);
-  vfs->write("/Document/a.txt", O_RDWR, buf, strlen(buf));  
+  vfs->write("/Document/a.txt", buf, strlen(buf));  
 }
 
 #endif
