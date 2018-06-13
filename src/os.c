@@ -78,11 +78,11 @@ static void simple_test(){
     printf("%s\n", wbuf);
     sprintf(dir, "/Document/%c%c.txt", (char)('a'+i%26), char('a'+i/26));
     fd[i] = vfs->open(dir, O_RDWR);
-    ret = vfs->write(fd1, wbuf, strlen(wbuf));  
-    printf("wsiz = %d\n", ret1);
-    vfs->lseek(fd1, 0, 0);
-    ret1 = vfs->read(fd1, rbuf, 20);
-    printf("rsiz = %d\n", ret1);
+    ret = vfs->write(fd[i], wbuf, strlen(wbuf));  
+    printf("wsiz = %d\n", ret);
+    vfs->lseek(fd[i], 0, 0);
+    ret = vfs->read(fd[i], rbuf, 20);
+    printf("rsiz = %d\n", ret);
     printf("%s\n\n", rbuf); 
   }
   for (int i = 0; i < 100; i++) {
