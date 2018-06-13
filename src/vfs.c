@@ -43,6 +43,7 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 	for (int i = 0; i < NINODES; i++){
 		if (fs->inode[i] != NULL && strcmp(fs->inode[i]->name, path) == 0){
+			_debug("path = %s", path);
 			return fs->inode[i];
 		} 
 	}
@@ -121,14 +122,10 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 	if (inode == NULL || file->mode == O_WRONLY) {
 		_debug("Invalid mode or inode!");
 	}
-
-	_debug("inode->data = %s", inode->data + file->off);
-
+	// _debug("inode->data = %s", inode->data + file->off);
 	int len = size;
 	if (len + file->off > strlen(inode->data)) len = strlen(inode->data) - file->off;
-	
-	_debug("size, len, off = %d, %d, %d", size, len, file->off);
-
+	// _debug("size, len, off = %d, %d, %d", size, len, file->off);
 	memcpy(buf, inode->data + file->off, len); 
 	buf[len] = '\0';
 
