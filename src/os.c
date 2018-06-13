@@ -69,12 +69,16 @@ static void test_sem(){
 
 static void test_file(){
 
-  char buf[MAXDATASZ];
+  char wbuf[MAXDATASZ], rbuf[MAXDATASZ];
   strcpy(buf, "Hello World!");
 
   int fd = vfs->open("/Document/a.txt", O_RDWR);
-  int ret = vfs->write(fd, buf, strlen(buf));  
+  int ret = vfs->write(fd, wbuf, strlen(buf));  
+
   printf("wsiz = %d\n", ret);
+  vfs->read(fd, rbuf, MAXDATASZ);
+  printf("%s\n", rbuf);
+  
 }
 
 #endif
