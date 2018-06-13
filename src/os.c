@@ -71,7 +71,7 @@ static void test_file(){
 
   char wbuf[MAXDATASZ], rbuf[MAXDATASZ];
   strcpy(wbuf, "Hello World!");
-  strcpy(r, "");
+  strcpy(rbuf, "???");
 
   int fd = vfs->open("/Document/a.txt", O_RDWR);
   int ret = vfs->write(fd, wbuf, strlen(wbuf));  
