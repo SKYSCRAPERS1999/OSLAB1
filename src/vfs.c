@@ -131,6 +131,8 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 
 	memcpy(buf, inode->data + file->off, len); 
 	buf[len] = '\0';
+
+	_debug("%s", buf);
 	file->off += len;
 	return len;
 }
