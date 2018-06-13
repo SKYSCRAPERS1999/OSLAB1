@@ -127,6 +127,7 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	file->fd = find_nfd(); //allocate an fd.
 
 	if (file->fd == -1) _debug("No available fd!");
+	_debug("file->fd = %d", fd);
 
 	ftable[file->fd] = file;
 	if (ftable[file->fd] == NULL) panic("NULL error");
