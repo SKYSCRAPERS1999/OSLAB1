@@ -84,20 +84,19 @@ static void simple_test(){
     printf("rsiz = %d\n", ret);
     printf("%s\n\n", rbuf); 
   }
-  for (int i = 0; i < 100; i += 2) {
+  for (int i = 0; i < 100; i++) {
     vfs->close(fd[i]);
   }
-  for (int i = 100, ret, j; i < 150; i++){
-    strcpy(wbuf, "Hello World "); j = strlen(wbuf); wbuf[j] = pool[i%26]; wbuf[j+1] = '\0'; 
+  for (int i = 100-1, ret, j; i >= 0; i++){
     strcpy(dir, "/Document/"); j = strlen(dir); dir[j] = pool[i%26]; dir[j+1] = pool[i/26]; dir[j+2] = '\0'; 
-
     fd[i] = vfs->open(dir, O_RDWR);
-    ret = vfs->write(fd[i], wbuf, strlen(wbuf));  
-    printf("wsiz = %d\n", ret);
     vfs->lseek(fd[i], 0, 0);
     ret = vfs->read(fd[i], rbuf, 255);
     printf("rsiz = %d\n", ret);
     printf("%s\n\n", rbuf); 
+  }
+  for (int i = 0; i < 100; i++) {
+    vfs->close(fd[i]);
   }
 }
 
