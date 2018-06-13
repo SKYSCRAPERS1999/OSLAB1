@@ -58,8 +58,8 @@ static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 
 			_debug("allocate an inode %d", i);
 			_debug("allocated path is %s", fs->inode[i]->name);
-			_debug("%s", fs->inode->data);
-			
+			_debug("%s", fs->inode[i]->data);
+
 			fs->inode[i]->ref = 1;
 			fs->inode[i]->type = mode;
 			return fs->inode[i];
