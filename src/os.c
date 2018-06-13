@@ -73,9 +73,10 @@ char dir[256];
 int fd[256];
 
 static void simple_test(){
-  for (int i = 0, ret; i < 100; i++){
-    strcpy(wbuf, "Hello World "); strncat(wbuf, (char*)(i + 'a'), i + 1);
-    strcpy(dir, "/Document/"); strncat(dir, (char*)('a'+i%26), 1);
+  char pool[] = "abcdefghijklmnopqrstuvwxyz";
+  for (int i = 0, ret, j; i < 100; i++){
+    strcpy(wbuf, "Hello World "); j = strlen(wbuf); wbuf[j] = pool[i/26]; wbuf[j+1] = '\0'; 
+    strcpy(dir, "/Document/"); dir[j] = pool[i%26]; dir[j+1] = pool[i/26]; dir[j+2] = '\0'; 
 
     fd[i] = vfs->open(dir, O_RDWR);
     ret = vfs->write(fd[i], wbuf, strlen(wbuf));  
