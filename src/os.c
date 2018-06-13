@@ -67,9 +67,7 @@ static void test_sem(){
 
 #ifdef FILETEST
 
-char wbuf[256];
-char rbuf[256];
-char dir[256];
+char wbuf[256], rbuf[256], dir[256];
 int fd[256];
 
 static void simple_test(){
