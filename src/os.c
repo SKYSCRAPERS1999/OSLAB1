@@ -68,9 +68,12 @@ static void test_sem(){
 #ifdef FILETEST
 
 static void test_file(){
+
+  char buf[BUFSZ];
+  strcpy(buf, "Hello World!");
+
   vfs->open("/Document/a.txt", O_RDWR);
-  vfs->open("/Document/a.txt", O_RDWR);
-  
+  vfs->write("/Document/a.txt", O_RDWR, buf, strlen(buf));  
 }
 
 #endif
