@@ -47,7 +47,7 @@ struct inode {
   int inum;      // Inode number
   int type;     
   int size;
-  file_t* files[NDIRECT];
+  file_t* file[NDIRECT];
   char data[MAXDATASZ];
 };
 
