@@ -90,7 +90,7 @@ static void test_file(){
   printf("%s\n", rbuf);
 
   strcpy(wbuf, "Hello Three_Pupils!");
-  fd = vfs->open("/Document/b.txt", O_RDWR);
+  fd = vfs->open("/Document/c.txt", O_RDWR);
   ret = vfs->write(fd, wbuf, strlen(wbuf));  
   printf("wsiz = %d\n", ret);
   vfs->lseek(fd, 0, 0);
