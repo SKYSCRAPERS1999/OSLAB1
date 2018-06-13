@@ -129,7 +129,7 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	if (file->fd == -1) _debug("No available fd!");
 
 	ftable[file->fd] = file;
-	if (ftable[i] != NULL) panic("NULL error");
+	if (ftable[file->fd] != NULL) panic("NULL error");
 	ftable[file->fd]->ref = 1;
 
 	for (int i = 0; i < NDIRECT; i++){
