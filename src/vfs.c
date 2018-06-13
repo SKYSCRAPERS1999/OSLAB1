@@ -29,7 +29,6 @@ char mounted_name[3][20];
 filesystem_t* FS[3];
 
 file_t* ftable[MAXFILENUM];
-int nfd = 0; // next fd
 
 //fsopt
 
@@ -97,6 +96,13 @@ static void create_devfs() {
 }
 
 //file
+static int find_nfd(){
+  for (int i = 0; i < NFILE; i++){
+    if (ftable[i] == NULL) return i;
+  }
+  return -1;
+}
+
 static int find_file(int fd){
   for (int i = 0; i < NFILE; i++){
     if (ftable[i] != NULL && ftable[i]->fd == fd) return i;
@@ -118,7 +124,9 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 		} 
 	}
 
-	file->fd = nfd++;
+	file->fd = find_nfd();
+	if (file->fd == -1) _debug("No available fd!");
+	
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] == NULL) {
 			inode->file[i] = file;
