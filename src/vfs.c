@@ -125,8 +125,7 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	}
 
 	file->fd = find_nfd(); //allocate an fd.
-	_debug("file->fd = %d", file->fd);
-	
+
 	if (file->fd == -1) _debug("No available fd!");
 
 	for (int i = 0; i < NDIRECT; i++){
@@ -267,17 +266,17 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	
 	_debug("fd = %d", fd);
 
-	int cnt;
-	for (cnt = 0; cnt < NFILE; cnt++){
-		if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {
-			ftable[cnt] = f;
-			ftable[cnt]->ref = 1;
-			break;
-		}
-	}
-	if (cnt >= NFILE){
-		_debug("Allocation failed"); return -1;
-	}
+	// int cnt;
+	// for (cnt = 0; cnt < NFILE; cnt++){
+	// 	if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {
+	ftable[fd] = f;
+	ftable[fd]->ref = 1;
+			// break;
+	// 	}
+	// }
+	// if (cnt >= NFILE){
+	// 	_debug("Allocation failed"); return -1;
+	// }
 	return fd;
 }
 static ssize_t vfs_read(int fd, void *buf, size_t nbyte){
