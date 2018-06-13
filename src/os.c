@@ -74,8 +74,8 @@ int fd[256];
 
 static void simple_test(){
   for (int i = 0, ret; i < 100; i++){
-    strcpy(wbuf, "Hello World "); strncat(wbuf, (char)(i + 'a'), i + 1);
-    strcpy(dir, "/Document/"); strncat(dir, (char)('a'+i%26), 1);
+    strcpy(wbuf, "Hello World "); strncat(wbuf, (char*)(i + 'a'), i + 1);
+    strcpy(dir, "/Document/"); strncat(dir, (char*)('a'+i%26), 1);
 
     fd[i] = vfs->open(dir, O_RDWR);
     ret = vfs->write(fd[i], wbuf, strlen(wbuf));  
