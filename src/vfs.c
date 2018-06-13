@@ -124,9 +124,10 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 		} 
 	}
 
-	file->fd = find_nfd();
+	file->fd = find_nfd(); //allocate an fd.
+
 	if (file->fd == -1) _debug("No available fd!");
-	
+
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] == NULL) {
 			inode->file[i] = file;
@@ -178,6 +179,7 @@ static int fileops_close(inode_t *inode, file_t *file, int p){
 	}
 	pmm->free(file);
 	ftable[p] = NULL;
+	_debug("file free with fd = %d", p);
 	return 0;
 }
 //vfs 
