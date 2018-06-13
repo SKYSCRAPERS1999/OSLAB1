@@ -27,11 +27,3 @@ void draw_rect(uint32_t *pixels, int x, int y, int w, int h); // 在屏幕上绘
 void draw_sync(); // 同步屏幕
 int screen_width(); // 获得屏幕的宽度
 int screen_height(); // 获得屏幕的高度
-
-#define assert(cond) \
-    do { \
-      if (!(cond)) { \
-        printf("Assertion fail at %s:%d\n", __FILE__, __LINE__); \
-        _halt(1); \
-      } \
-    } while (0)
