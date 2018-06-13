@@ -118,7 +118,7 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 		} 
 	}
 
-	file->fd = fd++;
+	file->fd = nfd++;
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] == NULL) {
 			inode->file[i] = file;
