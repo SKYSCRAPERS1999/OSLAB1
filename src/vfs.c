@@ -80,7 +80,7 @@ static int find_file(int fd){
 }
 
 static int fileops_open(inode_t *inode, file_t *file, int flags){
-	
+
 	return 0;
 }
 static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size){
@@ -93,6 +93,9 @@ static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whenc
 	return 0;
 }
 
+static int fileops_close(inode_t *inode, file_t *file){
+	return 0;
+}
 //vfs 
 
 static void vfs_init(){
@@ -191,11 +194,12 @@ static ssize_t vfs_write(int fd, void *buf, size_t nbyte){
 static off_t vfs_lseek(int fd, off_t offset, int whence){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_lseek(ftable[p]->f_inode, ftable[p], buf, nbyte);
+    return fileops_lseek(ftable[p]->f_inode, ftable[p], offset, whence);
 }
+
 static int vfs_close(int fd){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_close(ftable[p]->f_inode, ftable[p], buf, nbyte);
+    return fileops_close(ftable[p]->f_inode, ftable[p]);
 	return 0;
 }
