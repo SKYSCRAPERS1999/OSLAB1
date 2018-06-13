@@ -130,7 +130,6 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	_debug("file->fd = %d", file->fd);
 
 	ftable[file->fd] = file;
-	if (ftable[file->fd] == NULL) panic("NULL error");
 	ftable[file->fd]->ref = 1;
 
 	for (int i = 0; i < NDIRECT; i++){

@@ -80,7 +80,7 @@ static void test_file(){
   ret = vfs->read(fd, rbuf, 20);
   printf("rsiz = %d\n", ret);
   printf("%s\n\n", rbuf);
-  vfs->close(fd);
+  //vfs->close(fd);
 
   strcpy(wbuf, "Hello JYY!");
   printf("%s\n", wbuf);
@@ -91,7 +91,7 @@ static void test_file(){
   ret = vfs->read(fd, rbuf, 20);
   printf("rsiz = %d\n", ret);
   printf("%s\n\n", rbuf);
-  vfs->close(fd);
+  //vfs->close(fd);
 
   strcpy(wbuf, "Hello Three_Pupils!");
   printf("%s\n", wbuf);
@@ -102,7 +102,7 @@ static void test_file(){
   ret = vfs->read(fd, rbuf, 20);
   printf("rsiz = %d\n", ret);
   printf("%s\n\n", rbuf);
-  vfs->close(fd);
+  //vfs->close(fd);
 
 }
 
