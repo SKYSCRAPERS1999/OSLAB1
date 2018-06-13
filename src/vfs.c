@@ -175,8 +175,10 @@ static int vfs_access(const char *path, int mode){
 		_debug("%s", lpath + strlen("/"));
 		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath + strlen("/"), mode);
 	}else if ((lpath = strstr(path, "/procfs")) != NULL){
+		_debug("%s", lpath + strlen("/procfs"));
 		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath + strlen("/procfs"), mode);
 	}else if ((lpath = strstr(path, "/devfs")) != NULL){
+		_debug("%s", lpath + strlen("/devfs"));
 		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath + strlen("/devfs"), mode);
 	}else{
 		_debug("Invalid access!");
@@ -205,13 +207,17 @@ static int vfs_unmount(const char *path){
 }
 
 static int vfs_open(const char *path, int mode/*flags?*/){
+
 	char* lpath = NULL;
 	inode_t* handle = NULL;
 	if ((lpath = strstr(path, "/")) != NULL){
+		_debug("%s", lpath + strlen("/"));
 		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath + strlen("/"), mode);
 	}else if ((lpath = strstr(path, "/procfs")) != NULL){
+		_debug("%s", lpath + strlen("/procfs"));
 		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath + strlen("/procfs"), mode);
 	}else if ((lpath = strstr(path, "/devfs")) != NULL){
+		_debug("%s", lpath + strlen("/devfs"));
 		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath + strlen("/devfs"), mode);
 	}else{
 		_debug("Invalid access!");
