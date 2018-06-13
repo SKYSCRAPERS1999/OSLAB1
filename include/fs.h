@@ -19,8 +19,8 @@
 #define BSIZE 512  // block size
 #define NDIRECT 12
 #define NINODES 128
-#define NFILE 128
-#define MAXFILENUM 128
+#define NFILE 256
+#define MAXFILENUM 256
 #define MAXDATASZ 4096
 #define MAXNAMESZ 64
 
