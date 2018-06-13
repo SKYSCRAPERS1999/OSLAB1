@@ -259,7 +259,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	int cnt;
 	for (cnt = 0; cnt < NFILE; cnt++){
 		if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {
-]			ftable[cnt] = f;
+			ftable[cnt] = f;
 			ftable[cnt]->ref = 1;
 			break;
 		}
