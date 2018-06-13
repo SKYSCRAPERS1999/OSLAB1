@@ -51,7 +51,7 @@ static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 			strcpy(fs->inode[i]->name, path);
 			fs->inode[i]->ref = 1;
 			fs->inode[i]->mode = mode;
-			return fs->inode;
+			return fs->inode[i];
 		} 
 	}
 	panic("lookup error");
