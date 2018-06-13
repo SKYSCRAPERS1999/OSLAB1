@@ -168,7 +168,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	if (f == NULL) {
 		panic("Allocation failed"); return -1;
 	}
-	int fd = fileops_open(inode, file, mode); 
+	int fd = fileops_open(handle, file, mode); 
 	int cnt;
 	for (cnt = 0; cnt < NFILE; cnt++){
 		if (ftable[cnt]->ref == 0) {
