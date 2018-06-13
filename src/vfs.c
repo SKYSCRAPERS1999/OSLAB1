@@ -125,7 +125,8 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 	}
 
 	file->fd = find_nfd(); //allocate an fd.
-
+	_debug("file->fd = %d", file->fd);
+	
 	if (file->fd == -1) _debug("No available fd!");
 
 	for (int i = 0; i < NDIRECT; i++){
