@@ -72,8 +72,8 @@ static void test_file(){
   char buf[BUFSZ];
   strcpy(buf, "Hello World!");
 
-  vfs->open("/Document/a.txt", O_RDWR);
-  vfs->write("/Document/a.txt", buf, strlen(buf));  
+  int fd = vfs->open("/Document/a.txt", O_RDWR);
+  vfs->write(fd, buf, strlen(buf));  
 }
 
 #endif
