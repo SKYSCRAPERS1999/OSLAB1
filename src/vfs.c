@@ -40,8 +40,21 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	else { panic("Undefined fsops name"); return; }
 }
 
-static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int flags){
-
+static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
+	for (int i = 0; i < NINODES; i++){
+		if (fs->inode[i] != NULL && strcmp(fs->inode[i]->name, path) == 0){
+			return fs->inode[i];
+		} 
+	}
+	for (int i = 0; i < NINODES; i++){
+		if (fs->inode[i] == NULL){
+			strcpy(fs->inode[i]->path, path);
+			fs->inode->ref = 1;
+			fs->inode->mode = mode;
+			return fs->inode;
+		} 
+	}
+	panic("lookup error");
     return NULL;
 }
 static int fsops_close(inode_t *inode){
@@ -125,6 +138,8 @@ static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size
 }
 
 static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whence){
+	file->off += whence;
+	if (strlen(file->inode->data) < file->off) file->off = strlen(file->inode->data);
 	return 0;
 }
 

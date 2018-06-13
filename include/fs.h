@@ -18,10 +18,11 @@
 #define FSSIZE 64  // size of file system in blocks
 #define BSIZE 512  // block size
 #define NDIRECT 12
-#define NINODES 64
-#define NFILE 64
+#define NINODES 128
+#define NFILE 128
 #define MAXFILENUM 128
 #define MAXDATASZ 4096
+#define MAXNAMESZ 64
 
 struct fsops {
     void (*init)(filesystem_t *fs, const char *name, inode_t *dev);
@@ -39,14 +40,13 @@ struct fileops {
 struct filesystem { 
   int type;
   fsops_t* ops;
-  inode_t* inodes[NINODES];
+  inode_t* inode[NINODES];
 };
 
 struct inode {
+  char name[MAXNAMESZ];
   int ref;        // used
-  int inum;      // Inode number
   int type;     
-  int size;
   file_t* file[NDIRECT];
   char data[MAXDATASZ];
 };
