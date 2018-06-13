@@ -87,7 +87,7 @@ static void simple_test(){
   for (int i = 0; i < 10; i++) {
     vfs->close(fd[i]);
   }
-  for (int i = 10-1, ret, j; i >= 0; i++){
+  for (int i = 10-1, ret, j; i >= 0; i--){
     strcpy(dir, "/Document/"); j = strlen(dir); dir[j] = pool[i%26]; dir[j+1] = pool[i/26]; dir[j+2] = '\0'; 
     fd[i] = vfs->open(dir, O_RDWR);
     vfs->lseek(fd[i], 0, 0);
@@ -95,7 +95,7 @@ static void simple_test(){
     printf("rsiz = %d\n", ret);
     printf("%s\n\n", rbuf); 
   }
-  for (int i = 0; i < 10; i++) {
+  for (int i = 10-1; i >= 0; i--) {
     vfs->close(fd[i]);
   }
 }
