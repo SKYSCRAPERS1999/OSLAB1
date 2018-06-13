@@ -74,9 +74,9 @@ int fd[256];
 
 static void simple_test(){
   for (int i = 0, ret; i < 100; i++){
-    sprintf(wbuf, "Hello World %d!", i);
-    printf("%s\n", wbuf);
-    sprintf(dir, "/Document/%c%c.txt", (char)('a'+i%26), char('a'+i/26));
+    strcpy(wbuf, "Hello World "); strcat(wbuf, i + 'a');
+    strcpy(dir, "/Document/"); strcat(dir, (char)('a'+i%26)); strcat(dir, char('a'+i/26));
+
     fd[i] = vfs->open(dir, O_RDWR);
     ret = vfs->write(fd[i], wbuf, strlen(wbuf));  
     printf("wsiz = %d\n", ret);
