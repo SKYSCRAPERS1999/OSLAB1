@@ -128,6 +128,9 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 
 	if (file->fd == -1) _debug("No available fd!");
 
+	ftable[fd] = file;
+	ftable[fd]->ref = 1;
+
 	for (int i = 0; i < NDIRECT; i++){
 		if (inode->file[i] == NULL) {
 			inode->file[i] = file;
@@ -269,8 +272,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	// int cnt;
 	// for (cnt = 0; cnt < NFILE; cnt++){
 	// 	if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {
-	ftable[fd] = f;
-	ftable[fd]->ref = 1;
+	
 			// break;
 	// 	}
 	// }
