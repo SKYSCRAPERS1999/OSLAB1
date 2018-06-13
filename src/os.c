@@ -78,7 +78,7 @@ static void test_file(){
   vfs->lseek(fd, 0, 0);
   ret = vfs->read(fd, rbuf, 20);
   printf("rsiz = %d\n", ret);
-  //printf("%s\n", rbuf);
+  printf("%s\n", rbuf);
 
 }
 
