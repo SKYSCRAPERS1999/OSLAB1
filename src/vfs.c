@@ -125,8 +125,8 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 	_debug("inode->data = %s", inode->data);
 	_debug("strlen(inode->data) = %d", strlen(inode->data));
 
-	int len = ((file->off + size > (int)strlen(inode->data)) ? (int)strlen(inode->data) - file->off : size);
-	if (len < 0) len = 0;
+	int len = size;
+	if (len + file->off > strlen(inode->data)) len = strlen(inode->data) - file->off;
 	
 	_debug("size, len, off = %d, %d, %d", size, len, file->off);
 
