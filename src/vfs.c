@@ -105,18 +105,38 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 	if (inode == NULL || file->mode == O_WRONLY) {
 		panic("Invalid mode or inode!");
 	}
-	strcpy(buf, inode->data + file->off);
-	file->off += strlen(buf);
-	return strlen(buf);
+	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
+	if (len < 0) len = 0;
+	memcpy(buf, inode->data + file->off, len);
+	buf[size] = '\0';
+	file->off += len;
+	return len;
 }
 static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size_t size){
-	return 0;
+	if (inode == NULL || file->mode == O_WRONLY) {
+		panic("Invalid mode or inode!");
+	}
+	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
+	if (len < 0) len = 0;
+	memcpy(inode->data + file->off, buf, len);
+	inode->data[file->off + len] = '\0';
+	file->off += len;
+	return len;
 }
+
 static off_t fileops_lseek(inode_t *inode, file_t *file, off_t offset, int whence){
 	return 0;
 }
 
-static int fileops_close(inode_t *inode, file_t *file){
+static int fileops_close(inode_t *inode, file_t *file, int p){
+	for (int i = 0; i < NDIRECT; i++){
+		if (inode->file[i] != NULL && inode->file[i]->fd == file->fd){
+			inode->file[i] = NULL
+			break;
+		}
+	}
+	pmm->free(file);
+	ftable[p] = NULL;
 	return 0;
 }
 //vfs 
@@ -224,6 +244,6 @@ static off_t vfs_lseek(int fd, off_t offset, int whence){
 static int vfs_close(int fd){
 	int p = find_file(fd);
     if (p == -1) return -1;
-    return fileops_close(ftable[p]->inode, ftable[p]);
+    return fileops_close(ftable[p]->inode, ftable[p], p);
 	return 0;
 }
