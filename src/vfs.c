@@ -49,12 +49,16 @@ static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 	}
 	for (int i = 0; i < NINODES; i++){
 		if (fs->inode[i] == NULL){
+
 			_debug("allocate an inode %d", i);
-			_debug("allocated path is %d", path);
+			
 			fs->inode[i] = (inode_t *)pmm->alloc(sizeof(inode_t));
 			if (NULL == fs->inode[i]) _debug("fs inode allocation failed");
 
 			strcpy(fs->inode[i]->name, path);
+
+			_debug("allocated path is %d", fs->inode[i]->name);
+			
 			fs->inode[i]->ref = 1;
 			fs->inode[i]->type = mode;
 			return fs->inode[i];
