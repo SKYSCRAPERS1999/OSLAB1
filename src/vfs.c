@@ -121,6 +121,9 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 	if (inode == NULL || file->mode == O_WRONLY) {
 		_debug("Invalid mode or inode!");
 	}
+
+	_debug("inode->data = %s", inode->data);
+	
 	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
 	if (len < 0) len = 0;
 	
