@@ -76,7 +76,7 @@ static void test_file(){
   int fd = vfs->open("/Document/a.txt", O_RDWR);
   int ret = vfs->write(fd, wbuf, strlen(wbuf));  
   printf("wsiz = %d\n", ret);
-
+  vfs->read(fd, rbuf, 20);
   //ret = vfs->read(fd, rbuf, MAXDATASZ);
   //printf("rsiz = %d\n", ret);
   //printf("%s\n", rbuf);
