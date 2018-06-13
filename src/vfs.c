@@ -58,10 +58,9 @@ static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 
 			_debug("allocate an inode %d", i);
 			_debug("allocated path is %s", fs->inode[i]->name);
-			_debug("%s", fs->inode[i]->data);
-
 			fs->inode[i]->ref = 1;
 			fs->inode[i]->type = mode;
+
 			return fs->inode[i];
 		} 
 	}
@@ -248,6 +247,9 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 		_debug("Allocation failed"); return -1;
 	}
 	int fd = fileops_open(handle, f, mode); 
+	
+	_debug("fd = %d", fd);
+
 	int cnt;
 	for (cnt = 0; cnt < NFILE; cnt++){
 		if (ftable[cnt] == NULL || ftable[cnt]->ref == 0) {

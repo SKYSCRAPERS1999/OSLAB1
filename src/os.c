@@ -80,7 +80,7 @@ static void test_file(){
   ret = vfs->read(fd, rbuf, 20);
   printf("rsiz = %d\n", ret);
   printf("%s\n\n", rbuf);
-
+  
   strcpy(wbuf, "Hello JYY!");
   printf("%s\n", wbuf);
   fd = vfs->open("/Document/b.txt", O_RDWR);
