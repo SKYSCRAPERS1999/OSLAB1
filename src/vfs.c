@@ -37,7 +37,7 @@ static void fsops_init(struct filesystem *fs, const char *name, inode_t *dev){
 	if (strcmp(name, "kvfs") == 0) fs->type = KVFS;
 	else if (strcmp(name, "procfs") == 0) fs->type = PROCFS;
 	else if (strcmp(name, "devfs") == 0) fs->type = DEVFS;
-	else { panic("Undefined fsops name"); return; }
+	else { _debug("Undefined fsops name"); return; }
 }
 
 static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
@@ -54,7 +54,7 @@ static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 			return fs->inode[i];
 		} 
 	}
-	panic("lookup error");
+	_debug("lookup error");
     return NULL;
 }
 static int fsops_close(inode_t *inode){
@@ -64,21 +64,21 @@ static int fsops_close(inode_t *inode){
 
 static void create_kvfs() {
   FS[KVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
-  if (NULL == FS[KVFS]) panic("fs allocation failed");
+  if (NULL == FS[KVFS]) _debug("fs allocation failed");
   FS[KVFS]->ops = &kvfs_ops; // 你为kvfs定义的fsops_t，包含函数的实现
   FS[KVFS]->ops->init(FS[KVFS], "kvfs", NULL);
   vfs->mount("/", FS[KVFS]);
 }
 static void create_procfs() {
   FS[PROCFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
-  if (NULL == FS[PROCFS]) panic("fs allocation failed");
+  if (NULL == FS[PROCFS]) _debug("fs allocation failed");
   FS[PROCFS]->ops = &procfs_ops; // 你为procfs定义的fsops_t，包含函数的实现
   FS[PROCFS]->ops->init(FS[PROCFS], "procfs", NULL);
   vfs->mount("/", FS[PROCFS]);
 }
 static void create_devfs() {
   FS[DEVFS] = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
-  if (NULL == FS[DEVFS]) panic("fs allocation failed");
+  if (NULL == FS[DEVFS]) _debug("fs allocation failed");
   FS[DEVFS]->ops = &devfs_ops; // 你为devfs定义的fsops_t，包含函数的实现
   FS[DEVFS]->ops->init(FS[DEVFS], "devfs", NULL);
   vfs->mount("/", FS[DEVFS]);
@@ -94,7 +94,7 @@ static int find_file(int fd){
 
 static int fileops_open(inode_t *inode, file_t *file, int mode){
 	if (inode == NULL || (inode->type == O_RDONLY && mode == O_WRONLY) || (inode->type == O_WRONLY && mode == O_RDONLY)){
-		panic("Invalid mode or inode!");
+		_debug("Invalid mode or inode!");
 		return -1;
 	}
 	file->mode = mode;
@@ -111,12 +111,12 @@ static int fileops_open(inode_t *inode, file_t *file, int mode){
 			return file->fd;
 		}
 	}
-	panic("Maybe insufficient inode space");
+	_debug("Maybe insufficient inode space");
 	return -1;
 }
 static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size){
 	if (inode == NULL || file->mode == O_WRONLY) {
-		panic("Invalid mode or inode!");
+		_debug("Invalid mode or inode!");
 	}
 	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
 	if (len < 0) len = 0;
@@ -127,7 +127,7 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 }
 static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size_t size){
 	if (inode == NULL || file->mode == O_WRONLY) {
-		panic("Invalid mode or inode!");
+		_debug("Invalid mode or inode!");
 	}
 	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
 	if (len < 0) len = 0;
@@ -178,12 +178,12 @@ static int vfs_access(const char *path, int mode){
 	}else if ((lpath = strstr(path, "/devfs")) != NULL){
 		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath + strlen("/devfs"), mode);
 	}else{
-		panic("Invalid access!");
+		_debug("Invalid access!");
 		return -1;
 	}
 
 	if (handle == NULL || (handle->type == O_RDONLY && mode == O_WRONLY) || (handle->type == O_WRONLY && mode == O_RDONLY)){
-		panic("Invalid mode!");
+		_debug("Invalid mode!");
 		return -1;
 	}
 
@@ -213,18 +213,18 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 	}else if ((lpath = strstr(path, "/devfs")) != NULL){
 		handle = FS[DEVFS]->ops->lookup(FS[DEVFS], lpath + strlen("/devfs"), mode);
 	}else{
-		panic("Invalid access!");
+		_debug("Invalid access!");
 		return -1;
 	}
 	
 	if (handle == NULL || (handle->type == O_RDONLY && mode == O_WRONLY) || (handle->type == O_WRONLY && mode == O_RDONLY)){
-		panic("Invalid mode!");
+		_debug("Invalid mode!");
 		return -1;
 	}
 
 	file_t* f = (file_t *)pmm->alloc(sizeof(file_t));
 	if (f == NULL) {
-		panic("Allocation failed"); return -1;
+		_debug("Allocation failed"); return -1;
 	}
 	int fd = fileops_open(handle, f, mode); 
 	int cnt;
@@ -236,7 +236,7 @@ static int vfs_open(const char *path, int mode/*flags?*/){
 		}
 	}
 	if (cnt >= NFILE){
-		panic("Allocation failed"); return -1;
+		_debug("Allocation failed"); return -1;
 	}
 	return fd;
 }
