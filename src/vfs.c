@@ -74,7 +74,7 @@ static void create_devfs() {
 //file
 static int find_file(int fd){
   for (int i = 0; i < NFILE; i++){
-    if (f != NULL && f->fd = fd) return cnt;
+    if (ftable[i] != NULL && ftable[i]->fd = fd) return cnt;
   }
   return -1;
 }
