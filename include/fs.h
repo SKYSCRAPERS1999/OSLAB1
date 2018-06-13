@@ -56,7 +56,7 @@ struct file {
   int ref; // used
   int mode;
   int off;
-  inode_t* f_inode;
+  inode_t* inode;
 };
 
 // Inodes per block.
