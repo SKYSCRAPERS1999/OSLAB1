@@ -48,7 +48,7 @@ static inode_t *fsops_lookup(struct filesystem *fs, const char *path, int mode){
 	}
 	for (int i = 0; i < NINODES; i++){
 		if (fs->inode[i] == NULL){
-			strcpy(fs->inode[i]->path, path);
+			strcpy(fs->inode[i]->name, path);
 			fs->inode[i]->ref = 1;
 			fs->inode[i]->mode = mode;
 			return fs->inode;
