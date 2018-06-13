@@ -73,7 +73,8 @@ static void test_file(){
   strcpy(buf, "Hello World!");
 
   int fd = vfs->open("/Document/a.txt", O_RDWR);
-  vfs->write(fd, buf, strlen(buf));  
+  int ret = vfs->write(fd, buf, strlen(buf));  
+  printf("wsiz = %d\n", ret);
 }
 
 #endif
