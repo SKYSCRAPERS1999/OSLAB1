@@ -69,6 +69,7 @@ static void test_sem(){
 
 static void test_file(){
   vfs->open("/Document/a.txt", O_RDWR);
+  vfs->open("/Document/a.txt", O_RDWR);
   
 }
 
