@@ -132,7 +132,7 @@ static ssize_t fileops_write(inode_t *inode, file_t *file, const char *buf, size
 	if (inode == NULL || file->mode == O_WRONLY) {
 		_debug("Invalid mode or inode!");
 	}
-	int len = (file->off + size > strlen(inode->data) ? strlen(inode->data) - file->off : size);
+	int len = (file->off + size > MAXDATASZ ? MAXDATASZ - file->off : size);
 	if (len < 0) len = 0;
 	memcpy(inode->data + file->off, buf, len);
 	inode->data[file->off + len] = '\0';
@@ -270,5 +270,4 @@ static int vfs_close(int fd){
 	int p = find_file(fd);
     if (p == -1) return -1;
     return fileops_close(ftable[p]->inode, ftable[p], p);
-	return 0;
 }
