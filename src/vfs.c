@@ -105,7 +105,7 @@ static ssize_t fileops_read(inode_t *inode, file_t *file, char *buf, size_t size
 	if (inode == NULL || file->mode == O_WRONLY) {
 		panic("Invalid mode or inode!");
 	}
-	strcpy(buf, inode->data + off);
+	strcpy(buf, inode->data + file->off);
 	file->off += strlen(buf);
 	return strlen(buf);
 }
