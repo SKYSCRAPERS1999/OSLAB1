@@ -82,7 +82,6 @@ static void test_file(){
   printf("%s\n\n", rbuf);
 
   strcpy(wbuf, "Hello JYY!");
-  memset(rbuf, 0, sizeof(rbuf));
   printf("%s\n", wbuf);
   fd = vfs->open("/Document/b.txt", O_RDWR);
   ret = vfs->write(fd, wbuf, strlen(wbuf));  
@@ -93,7 +92,6 @@ static void test_file(){
   printf("%s\n\n", rbuf);
 
   strcpy(wbuf, "Hello Three_Pupils!");
-  memset(rbuf, 0, sizeof(rbuf));
   printf("%s\n", wbuf);
   fd = vfs->open("/Document/c.txt", O_RDWR);
   ret = vfs->write(fd, wbuf, strlen(wbuf));  
