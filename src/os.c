@@ -72,7 +72,7 @@ int fd[256];
 
 static void simple_test(){
   char pool[] = "abcdefghijklmnopqrstuvwxyz";
-  for (int i = 0, ret, j; i < 100; i++){
+  for (int i = 0, ret, j; i < 10; i++){
     strcpy(wbuf, "Hello World "); j = strlen(wbuf); wbuf[j] = pool[i%26]; wbuf[j+1] = '\0'; 
     strcpy(dir, "/Document/"); j = strlen(dir); dir[j] = pool[i%26]; dir[j+1] = pool[i/26]; dir[j+2] = '\0'; 
 
@@ -84,10 +84,10 @@ static void simple_test(){
     printf("rsiz = %d\n", ret);
     printf("%s\n\n", rbuf); 
   }
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 10; i++) {
     vfs->close(fd[i]);
   }
-  for (int i = 100-1, ret, j; i >= 0; i++){
+  for (int i = 10-1, ret, j; i >= 0; i++){
     strcpy(dir, "/Document/"); j = strlen(dir); dir[j] = pool[i%26]; dir[j+1] = pool[i/26]; dir[j+2] = '\0'; 
     fd[i] = vfs->open(dir, O_RDWR);
     vfs->lseek(fd[i], 0, 0);
@@ -95,7 +95,7 @@ static void simple_test(){
     printf("rsiz = %d\n", ret);
     printf("%s\n\n", rbuf); 
   }
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < 10; i++) {
     vfs->close(fd[i]);
   }
 }
