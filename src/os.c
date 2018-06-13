@@ -1,8 +1,10 @@
 #include <os.h>
 #include <mylib.h>
+#include <fs.h>
 
 //#define MTTEST
 //#define SEMTEST
+#define FILETEST
 
 static void os_init();
 static void os_run();
@@ -63,6 +65,15 @@ static void test_sem(){
 }
 #endif
 
+#ifdef FILETEST
+
+static void test_file(){
+  vfs->open("/Document/a.txt", O_RDWR);
+  
+}
+
+#endif
+
 static void os_run() {
 
   #ifdef MTTEST
@@ -73,6 +84,9 @@ static void os_run() {
     test_sem();
   #endif
 
+  #ifdef FILETEST
+    test_file();
+  #endif
   //printf("start\n");
   _intr_write(1); // enable interrupt
   while (1); // should never return
