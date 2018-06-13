@@ -46,7 +46,7 @@ struct filesystem {
 struct inode {
   char name[MAXNAMESZ];
   int ref;        // used
-  int mode;     
+  int type;     
   file_t* file[NDIRECT];
   char data[MAXDATASZ];
 };
