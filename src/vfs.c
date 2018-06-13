@@ -172,6 +172,7 @@ static int vfs_access(const char *path, int mode){
 	char* lpath = NULL;
 	inode_t* handle = NULL;
 	if ((lpath = strstr(path, "/")) != NULL){
+		_debug("%s", lpath + strlen("/"));
 		handle = FS[KVFS]->ops->lookup(FS[KVFS], lpath + strlen("/"), mode);
 	}else if ((lpath = strstr(path, "/procfs")) != NULL){
 		handle = FS[PROCFS]->ops->lookup(FS[PROCFS], lpath + strlen("/procfs"), mode);
