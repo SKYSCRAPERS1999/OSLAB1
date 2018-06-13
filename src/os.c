@@ -72,6 +72,7 @@ char rbuf[256];
 static void test_file(){
 
   strcpy(wbuf, "Hello World!");
+  printf("%s\n", wbuf);
   int fd = vfs->open("/Document/a.txt", O_RDWR);
   int ret = vfs->write(fd, wbuf, strlen(wbuf));  
   printf("wsiz = %d\n", ret);
@@ -81,6 +82,7 @@ static void test_file(){
   printf("%s\n", rbuf);
 
   strcpy(wbuf, "Hello JYY!");
+  printf("%s\n", wbuf);
   fd = vfs->open("/Document/b.txt", O_RDWR);
   ret = vfs->write(fd, wbuf, strlen(wbuf));  
   printf("wsiz = %d\n", ret);
@@ -90,6 +92,7 @@ static void test_file(){
   printf("%s\n", rbuf);
 
   strcpy(wbuf, "Hello Three_Pupils!");
+  printf("%s\n", wbuf);
   fd = vfs->open("/Document/c.txt", O_RDWR);
   ret = vfs->write(fd, wbuf, strlen(wbuf));  
   printf("wsiz = %d\n", ret);
