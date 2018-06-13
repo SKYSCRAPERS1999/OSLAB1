@@ -76,9 +76,9 @@ static void test_file(){
   int ret = vfs->write(fd, wbuf, strlen(wbuf));  
   printf("wsiz = %d\n", ret);
 
-  ret = vfs->read(fd, rbuf, MAXDATASZ);
-  printf("rsiz = %d\n", ret);
-  printf("%s\n", rbuf);
+  //ret = vfs->read(fd, rbuf, MAXDATASZ);
+  //printf("rsiz = %d\n", ret);
+  //printf("%s\n", rbuf);
 
 }
 
